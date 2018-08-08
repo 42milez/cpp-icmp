@@ -19,4 +19,7 @@ cable_configure_toolchain(DEFAULT cxx14)
 cable_set_build_type(DEFAULT RelWithDebInfo CONFIGURATION_TYPES Debug Release RelWithDebInfo)
 cable_add_buildinfo_library(PROJECT_NAME icmp)
 
+hunter_add_package(spdlog)
+find_package(spdlog CONFIG REQUIRED)
+
 add_subdirectory(icmp)
