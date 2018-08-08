@@ -22,4 +22,8 @@ cable_add_buildinfo_library(PROJECT_NAME icmp)
 hunter_add_package(spdlog)
 find_package(spdlog CONFIG REQUIRED)
 
+include_directories(${CMAKE_SOURCE_DIR})
+
+add_subdirectory(libparam)
+
 add_subdirectory(icmp)
