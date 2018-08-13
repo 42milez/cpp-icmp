@@ -17,12 +17,6 @@ set(PROJECT_VERSION 0.01)
 
 cable_configure_toolchain(DEFAULT cxx17)
 
-set(ICMP_CMAKE_DIR "${CMAKE_CURRENT_LIST_DIR}/cmake" CACHE PATH "The path to the cmake directory")
-list(APPEND CMAKE_MODULE_PATH ${ICMP_CMAKE_DIR})
-
-set(CMAKE_MAP_IMPORTED_CONFIG_DEBUG Release)
-set(CMAKE_MAP_IMPORTED_CONFIG_RELWITHDEBINFO Release)
-
 set(HUNTER_CONFIGURATION_TYPES Release CACHE STRING "Hunter configuration types")
 set(HUNTER_JOBS_NUMBER 4 CACHE STRING "Hunter jobs number")
 

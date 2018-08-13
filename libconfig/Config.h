@@ -1,7 +1,8 @@
 #ifndef ICMP_CONFIG_H
 #define ICMP_CONFIG_H
 
-
+#include <memory>
+#include <netinet/if_ether.h>
 #include <netinet/in.h>
 #include <string>
 
@@ -19,16 +20,22 @@ namespace config
     InAddr vip;
     InAddr vmask;
     InAddr gateway;
-    int IpTTL;
-    int MTU;
+    int ttl;
+    int mtu;
   };
+
+  const int DEFAULT_MTU = ETHERMTU;
+  const int DEFAULT_TTL = 64;
 
   class Config {
   public:
-    int set_default_param();
-    int read_param(string &fname);
+    Config();
     int is_target_ip_addr(InAddr &in_addr);
     int is_same_subnet(InAddr &addr);
+  private:
+    int set_default_param();
+    int read_param(string &fname);
+    unique_ptr<Param> param_;
   };
 }
 
