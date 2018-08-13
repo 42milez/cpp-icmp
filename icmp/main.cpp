@@ -1,7 +1,7 @@
 #include <iostream>
 #include <icmp/buildinfo.h>
 
-#include "libparam/Param.h"
+#include "libconfig/Config.h"
 
 namespace {
     void version() {

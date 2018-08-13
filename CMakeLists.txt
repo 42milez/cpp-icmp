@@ -24,6 +24,6 @@ find_package(spdlog CONFIG REQUIRED)
 
 include_directories(${CMAKE_SOURCE_DIR})
 
-add_subdirectory(libparam)
+add_subdirectory(libconfig)
 
 add_subdirectory(icmp)
