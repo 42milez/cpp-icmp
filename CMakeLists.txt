@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.10.3)
+cmake_minimum_required(VERSION 3.12.1)
 
 include(cmake/cable/bootstrap.cmake)
 include(CableBuildInfo)
@@ -15,7 +15,17 @@ HunterGate(
 project(icmp)
 set(PROJECT_VERSION 0.01)
 
-cable_configure_toolchain(DEFAULT cxx14)
+cable_configure_toolchain(DEFAULT cxx17)
+
+set(ICMP_CMAKE_DIR "${CMAKE_CURRENT_LIST_DIR}/cmake" CACHE PATH "The path to the cmake directory")
+list(APPEND CMAKE_MODULE_PATH ${ICMP_CMAKE_DIR})
+
+set(CMAKE_MAP_IMPORTED_CONFIG_DEBUG Release)
+set(CMAKE_MAP_IMPORTED_CONFIG_RELWITHDEBINFO Release)
+
+set(HUNTER_CONFIGURATION_TYPES Release CACHE STRING "Hunter configuration types")
+set(HUNTER_JOBS_NUMBER 4 CACHE STRING "Hunter jobs number")
+
 cable_set_build_type(DEFAULT RelWithDebInfo CONFIGURATION_TYPES Debug Release RelWithDebInfo)
 cable_add_buildinfo_library(PROJECT_NAME icmp)
 
