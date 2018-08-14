@@ -5,16 +5,10 @@
 
 #include "MAC.h"
 
-using std::invalid_argument;
-using std::move;
-using std::regex;
-using std::smatch;
-using std::vector;
-
-using boost::split;
-using boost::is_any_of;
-
+using namespace std;
 using namespace network;
+
+namespace bst = boost;
 
 const string MAC::MAC_ADDRESS_DELIMITER = ":";
 const string MAC::MAC_ADDRESS_PATTERN = "[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}";
@@ -24,7 +18,7 @@ MAC::MAC(const string mac) {
   smatch match;
 
   if (regex_match(mac, match, pattern)) {
-    split(mac_, mac, is_any_of(MAC_ADDRESS_DELIMITER));
+    bst::split(mac_, mac, bst::is_any_of(MAC_ADDRESS_DELIMITER));
   } else {
     throw invalid_argument("Invalid MAC address.");
   }

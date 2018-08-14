@@ -23,8 +23,8 @@ set(PROJECT_VERSION 0.0.1)
 cable_set_build_type(DEFAULT RelWithDebInfo CONFIGURATION_TYPES Debug Release RelWithDebInfo)
 cable_add_buildinfo_library(PROJECT_NAME icmp)
 
-hunter_add_package(Boost)
-find_package(Boost CONFIG REQUIRED)
+hunter_add_package(Boost COMPONENTS filesystem program_options system)
+find_package(Boost CONFIG REQUIRED COMPONENTS filesystem program_options system)
 
 hunter_add_package(spdlog)
 find_package(spdlog CONFIG REQUIRED)

@@ -7,8 +7,7 @@
 
 namespace network
 {
-  using std::string;
-  using std::vector;
+  using namespace std;
 
   class MAC {
   public:
