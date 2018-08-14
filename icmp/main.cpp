@@ -30,8 +30,6 @@ namespace
   };
 
   bool ExitHandler::s_shouldExit = false;
-
-}
 } // namespace
 
 int main(int argc, char** argv) {
