@@ -2,6 +2,7 @@
 #define ICMP_WORKER_H
 
 
+#include <functional>
 #include <memory>
 #include <thread>
 
