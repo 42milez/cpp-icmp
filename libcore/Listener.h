@@ -2,7 +2,9 @@
 #define ICMP_LISTENER_H
 
 
-class Listener {
+#include "Worker.h"
+
+class Listener : public Worker {
 
 };
 
