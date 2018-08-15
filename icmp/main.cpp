@@ -9,9 +9,16 @@
 #include "icmp/buildinfo.h"
 #include "libconfig/Config.h"
 
-using namespace std;
-
 namespace po = boost::program_options;
+
+using std::cerr;
+using std::cout;
+using std::endl;
+using std::invalid_argument;
+using std::make_unique;
+using std::string;
+using std::unique_ptr;
+using std::vector;
 
 namespace
 {

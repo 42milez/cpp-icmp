@@ -5,11 +5,13 @@
 
 #include "MAC.h"
 
-using namespace std;
-
 using namespace network;
 
 namespace bst = boost;
+
+using std::invalid_argument;
+using std::regex;
+using std::smatch;
 
 const string MAC::MAC_ADDRESS_DELIMITER = ":";
 const string MAC::MAC_ADDRESS_PATTERN = "[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}";

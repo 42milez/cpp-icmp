@@ -1,11 +1,10 @@
 #include <stdexcept>
+
 #include <arpa/inet.h>
 #include <boost/filesystem.hpp>
 #include <boost/property_tree/json_parser.hpp>
 
 #include "Config.h"
-
-using namespace std;
 
 using namespace config;
 
@@ -13,11 +12,14 @@ namespace fs = boost::filesystem;
 namespace pt = boost::property_tree;
 namespace nw = network;
 
+using std::invalid_argument;
+using std::make_unique;
+
 Config::Config(const string& file_path) {
   if (!fs::exists(file_path)) {
     throw invalid_argument("Invalid file path.");
   }
-  param_ = std::make_unique<Param>();
+  param_ = make_unique<Param>();
   read_param(file_path);
 }
 

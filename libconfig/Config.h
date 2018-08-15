@@ -12,9 +12,10 @@
 
 namespace config
 {
-  using namespace std;
-
   namespace nw = network;
+
+  using std::string;
+  using std::unique_ptr;
 
   using InAddr = struct in_addr;
 

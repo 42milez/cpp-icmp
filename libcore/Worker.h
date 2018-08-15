@@ -7,7 +7,9 @@
 
 namespace core
 {
-  using namespace std;
+  using std::function;
+  using std::thread;
+  using std::unique_ptr;
 
   class Worker {
   public:

@@ -1,7 +1,5 @@
 #include "Worker.h"
 
-using namespace std;
-
 using namespace core;
 
 void Worker::assign(function<void()> fn) {
