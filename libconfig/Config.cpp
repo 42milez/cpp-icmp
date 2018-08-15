@@ -32,41 +32,41 @@ void Config::read_param(const string& filename) {
   pt::ptree prop;
   read_json(filename, prop);
 
-  if (auto val = prop.get_optional<string>("Network.gateway")) {
+  if (auto val = prop.get_optional<string>("network.gateway")) {
     param_->gateway.s_addr = inet_addr(val.get().c_str());
   } else {
     throw invalid_argument("Invalid gateway address.");
   }
 
-  if (auto val = prop.get_optional<string>("Network.vip")) {
+  if (auto val = prop.get_optional<string>("network.vip")) {
     param_->vip.s_addr = inet_addr(val.get().c_str());
   } else {
     throw invalid_argument("Invalid virtual IP address.");
   }
 
-  if (auto val = prop.get_optional<string>("Network.vmask")) {
+  if (auto val = prop.get_optional<string>("network.vmask")) {
     param_->vmask.s_addr = inet_addr(val.get().c_str());
   } else {
     throw invalid_argument("Invalid virtual netmask.");
   }
 
-  if (auto val = prop.get_optional<string>("Network.device")) {
+  if (auto val = prop.get_optional<string>("network.device")) {
     param_->device = val.get();
   } else {
     throw invalid_argument("Invalid device name.");
   }
 
-  if (auto val = prop.get_optional<string>("Network.vmac")) {
+  if (auto val = prop.get_optional<string>("network.vmac")) {
     param_->vmac = make_unique<nw::MAC>(val.get());
   }
 
-  if (auto val = prop.get_optional<int>("Network.mtu")) {
+  if (auto val = prop.get_optional<int>("network.mtu")) {
     param_->mtu = val.get();
   } else {
     param_->mtu = DEFAULT_MTU;
   }
 
-  if (auto val = prop.get_optional<int>("Network.ttl")) {
+  if (auto val = prop.get_optional<int>("network.ttl")) {
     param_->ttl = val.get();
   } else {
     param_->ttl = DEFAULT_TTL;
