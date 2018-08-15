@@ -46,4 +46,4 @@ namespace config
 } // config
 
 
-#endif //ICMP_CONFIG_H
+#endif // ICMP_CONFIG_H

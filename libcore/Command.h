@@ -9,4 +9,4 @@ class Command : public Worker {
 };
 
 
-#endif //ICMP_COMMAND_H
+#endif // ICMP_COMMAND_H
