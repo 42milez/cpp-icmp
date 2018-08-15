@@ -1,0 +1,10 @@
+{
+  "network": {
+    "device": "",
+    "gateway": "",
+    "ttl": 64,
+    "vip": "",
+    "vmac": "",
+    "vmask": ""
+  }
+}
