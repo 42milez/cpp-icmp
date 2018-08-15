@@ -6,6 +6,7 @@
 #include "Config.h"
 
 using namespace std;
+
 using namespace config;
 
 namespace fs = boost::filesystem;

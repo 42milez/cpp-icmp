@@ -6,6 +6,7 @@
 #include "MAC.h"
 
 using namespace std;
+
 using namespace network;
 
 namespace bst = boost;

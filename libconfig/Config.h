@@ -4,6 +4,7 @@
 
 #include <memory>
 #include <string>
+
 #include <netinet/if_ether.h>
 #include <netinet/in.h>
 
@@ -41,7 +42,7 @@ namespace config
     void read_param(const string& fname);
     unique_ptr<Param> param_;
   };
-}
+} // config
 
 
 #endif //ICMP_CONFIG_H

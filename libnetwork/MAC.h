@@ -18,7 +18,7 @@ namespace network
     static const string MAC_ADDRESS_PATTERN;
     vector<string> mac_;
   };
-}
+} // network
 
 
 #endif // ICMP_MAC_H
