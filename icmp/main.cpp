@@ -82,6 +82,7 @@ int main(int argc, char** argv) {
   signal(SIGABRT, &ExitHandler::exitHandler);
   signal(SIGTERM, &ExitHandler::exitHandler);
   signal(SIGINT, &ExitHandler::exitHandler);
+  signal(SIGPIPE,SIG_IGN);
 
   ExitHandler exitHandler;
 
