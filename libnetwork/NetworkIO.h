@@ -7,6 +7,7 @@
 namespace network
 {
   using std::function;
+  using std::vector;
 
   class NetworkIO {
   public:
@@ -15,10 +16,11 @@ namespace network
     void wait_for_read(const function<void()>& fn);
   private:
     void create_raw_socket();
-    void create_multiplexer();
-    int soc_;
+    void setup_multiplexer();
+    int fd_;
     int mux_;
-    int port_;
+    static const int NEVENTS;
+    struct epoll_event ev_ret_[16];
   };
 }
 
