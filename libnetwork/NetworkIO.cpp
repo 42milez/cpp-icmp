@@ -108,7 +108,7 @@ void NetworkIO::wait_for_read(const function<void()> &fn) {
   }
   for (auto i = 0; i < nfds; i++) {
     if (ev_ret_[i].data.fd == fd_) {
-      // ...
+      fn();
     }
   }
 #else
