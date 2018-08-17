@@ -39,6 +39,7 @@ namespace config
     Config(const string& file_path);
     int is_target_ip_addr(InAddr &in_addr);
     int is_same_subnet(InAddr &addr);
+    string device();
   private:
     void read_param(const string& fname);
     unique_ptr<Param> param_;

@@ -1,12 +1,17 @@
-#ifndef ICMP_RAWSOCKET_H
-#define ICMP_RAWSOCKET_H
+#ifndef ICMP_RAWSOCKETIO_H
+#define ICMP_RAWSOCKETIO_H
 
 
 #include <functional>
 #include <memory>
 #include <string>
 
-#include <sys/epoll.h>
+#if defined(__linux__)
+  #include <sys/epoll.h>
+#else
+  // UNIX
+  // ...
+#endif
 
 #include "spdlog/spdlog.h"
 
@@ -19,11 +24,11 @@ namespace network
 
   using spdlog::logger;
 
-  class RawSocket {
+  class RawSocketIO {
   public:
-    RawSocket(const string device);
-    ~RawSocket();
-    void wait();
+    RawSocketIO(const string device);
+    ~RawSocketIO();
+    void wait(function<void()> fn);
   private:
     void create_socket();
     void setup_multiplexer();
@@ -40,4 +45,4 @@ namespace network
 } // network
 
 
-#endif // ICMP_RAWSOCKET_H
+#endif // ICMP_RAWSOCKETIO_H

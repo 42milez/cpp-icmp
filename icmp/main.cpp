@@ -8,6 +8,7 @@
 
 #include "icmp/buildinfo.h"
 #include "libconfig/Config.h"
+#include "libcore/Listener.h"
 
 namespace po = boost::program_options;
 
@@ -94,10 +95,16 @@ int main(int argc, char** argv) {
 
   ExitHandler exitHandler;
 
+  unique_ptr<core::Listener> listener = make_unique<core::Listener>(config->device());
+
+  listener->start();
+
   while (!exitHandler.shouldExit()) {
     // do something
     // ...
   }
+
+  listener->stop();
 
   return 0;
 }

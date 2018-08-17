@@ -6,7 +6,7 @@
 
 namespace core
 {
-  class Watcher : Worker {
+  class Watcher : public Worker {
   public:
     explicit Watcher();
     ~Watcher();

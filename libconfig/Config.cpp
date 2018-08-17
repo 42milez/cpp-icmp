@@ -75,3 +75,7 @@ void Config::read_param(const string& filename) {
     param_->ttl = DEFAULT_TTL;
   }
 }
+
+string Config::device() {
+  return param_->device;
+}

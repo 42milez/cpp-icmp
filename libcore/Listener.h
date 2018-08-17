@@ -3,22 +3,26 @@
 
 
 #include <memory>
+#include <string>
 
-#include "RawSocket.h"
+#include "libnetwork/RawSocketIO.h"
+
 #include "Worker.h"
 
 namespace core
 {
   namespace nw = network;
 
+  using std::string;
+
   class Listener : public Worker {
   public:
-    explicit Listener();
+    explicit Listener(const string device);
     ~Listener() override;
     void start() override;
     void stop() override;
   private:
-    unique_ptr<nw::RawSocket> listener_;
+    unique_ptr<nw::RawSocketIO> listener_;
   };
 } // core
 

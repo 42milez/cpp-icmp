@@ -26,17 +26,19 @@ using namespace network;
 
 using std::to_string;
 
-RawSocket::RawSocket(const string device) {
-  logger_ = spdlog::stdout_color_mt("RawSocket");
+const int RawSocketIO::NEVENTS = 16;
+
+RawSocketIO::RawSocketIO(const string device) {
+  logger_ = spdlog::stdout_color_mt("RawSocketIO");
   create_socket();
   setup_multiplexer();
 }
 
-RawSocket::~RawSocket() {
+RawSocketIO::~RawSocketIO() {
   close(fd_);
 }
 
-void RawSocket::create_socket() {
+void RawSocketIO::create_socket() {
 #if defined(__linux__)
   struct ifreq if_req;
   struct sockaddr_ll sa;
@@ -76,7 +78,7 @@ void RawSocket::create_socket() {
 #endif
 }
 
-void RawSocket::setup_multiplexer() {
+void RawSocketIO::setup_multiplexer() {
 #if defined(__linux__)
   mux_ = epoll_create(NEVENTS);
   if (mux_ < 0) {
@@ -97,7 +99,7 @@ void RawSocket::setup_multiplexer() {
 #endif
 }
 
-void RawSocket::wait() {
+void RawSocketIO::wait(function<void()> fn) {
 #if defined(__linux__)
   int nfds = epoll_wait(mux_, ev_ret_, NEVENTS, -1);
   if (nfds <= 0) {

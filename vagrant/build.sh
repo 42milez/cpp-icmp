@@ -24,6 +24,10 @@ cmake --build . --target icmp -- -j 2
 
 cd
 
+if [ ! -e /home/vagrant/build/icmp/icmp ]; then
+  exit
+fi
+
 cp /home/vagrant/build/icmp/icmp ${DIR_ICMP1}
 cp /home/vagrant/build/icmp/icmp ${DIR_ICMP2}
 

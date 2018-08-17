@@ -4,9 +4,12 @@
 
 #include "Worker.h"
 
-class Command : public Worker {
+namespace core
+{
+  class Command : public Worker {
 
-};
+  };
+}
 
 
 #endif // ICMP_COMMAND_H

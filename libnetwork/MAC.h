@@ -17,6 +17,7 @@ namespace network
   private:
     static const string MAC_ADDRESS_DELIMITER;
     static const string MAC_ADDRESS_PATTERN;
+
     vector<string> mac_;
   };
 } // network
