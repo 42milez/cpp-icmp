@@ -2,9 +2,12 @@
 #define ICMP_ETHERNET_H
 
 
-class Ethernet {
+namespace network
+{
+  class Ethernet {
 
-};
+  };
+} // network
 
 
 #endif // ICMP_ETHERNET_H

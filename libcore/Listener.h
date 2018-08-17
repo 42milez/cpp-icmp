@@ -13,16 +13,14 @@ namespace core
 {
   namespace nw = network;
 
-  using std::string;
-
   class Listener : public Worker {
   public:
-    explicit Listener(const string device);
+    explicit Listener(const std::string device);
     ~Listener() override;
     void start() override;
     void stop() override;
   private:
-    unique_ptr<nw::RawSocketIO> listener_;
+    std::unique_ptr<nw::RawSocketIO> listener_;
   };
 } // core
 

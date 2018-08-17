@@ -2,9 +2,12 @@
 #define ICMP_ARP_H
 
 
-class Arp {
+namespace network
+{
+  class Arp {
 
-};
+  };
+} // network
 
 
 #endif // ICMP_ARP_H

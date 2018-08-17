@@ -12,21 +12,12 @@
 
 namespace po = boost::program_options;
 
-using std::cerr;
-using std::cout;
-using std::endl;
-using std::invalid_argument;
-using std::make_unique;
-using std::string;
-using std::unique_ptr;
-using std::vector;
-
 namespace
 {
   void version() {
     const auto* buildinfo = icmp_get_buildinfo();
-    cout << "icmp " << buildinfo->project_version << "\n";
-    cout << "Build: " << buildinfo->system_name << "/" << buildinfo->build_type << endl;
+    std::cout << "icmp " << buildinfo->project_version << "\n";
+    std::cout << "Build: " << buildinfo->system_name << "/" << buildinfo->build_type << std::endl;
   }
 
   class ExitHandler {
@@ -43,7 +34,7 @@ namespace
 int main(int argc, char** argv) {
   po::options_description opt_desc("OPTIONS", 160);
   opt_desc.add_options()
-    ("config,c", po::value<string>()->value_name("<file>"),
+    ("config,c", po::value<std::string>()->value_name("<file>"),
      "Configure specialised network using given JSON information\n")
     ("help,h", "Show this help message and exit\n");
 
@@ -51,38 +42,38 @@ int main(int argc, char** argv) {
   allowed_options.add(opt_desc);
 
   po::variables_map vm;
-  vector<string> unrecognised_options;
+  std::vector<std::string> unrecognised_options;
   try {
     po::parsed_options parsed = po::command_line_parser(argc, argv).options(allowed_options).allow_unregistered().run();
     unrecognised_options = collect_unrecognized(parsed.options, po::include_positional);
     po::store(parsed, vm);
     po::notify(vm);
   } catch (po::error const &e) {
-    cerr << e.what();
+    std::cerr << e.what();
     return -1;
   }
 
   for (const auto &option : unrecognised_options) {
-    cerr << "Invalid argument: " << option << "\n";
+    std::cerr << "Invalid argument: " << option << "\n";
     return -1;
   }
 
   if (vm.count("h") || vm.count("help")) {
-    cout << "NAME:" << endl
-         << "   icmp " << icmp_get_buildinfo()->project_version << endl << endl
-         << "USAGE:" << endl
-         << "   icmp [options]" << endl << endl;
-    cout << opt_desc;
+    std::cout << "NAME:" << std::endl
+         << "   icmp " << icmp_get_buildinfo()->project_version << std::endl << std::endl
+         << "USAGE:" << std::endl
+         << "   icmp [options]" << std::endl << std::endl;
+    std::cout << opt_desc;
     return 0;
   }
 
-  unique_ptr<config::Config> config;
+  std::unique_ptr<config::Config> config;
 
   if (vm.count("config")) {
     try {
-      config = make_unique<config::Config>(vm["config"].as<string>());
-    } catch (invalid_argument const &e) {
-      cerr << "Invalid parameter: " << e.what() << endl;
+      config = std::make_unique<config::Config>(vm["config"].as<std::string>());
+    } catch (std::invalid_argument const &e) {
+      std::cerr << "Invalid parameter: " << e.what() << std::endl;
       return -1;
     }
   }
@@ -95,7 +86,7 @@ int main(int argc, char** argv) {
 
   ExitHandler exitHandler;
 
-  unique_ptr<core::Listener> listener = make_unique<core::Listener>(config->device());
+  std::unique_ptr<core::Listener> listener = std::make_unique<core::Listener>(config->device());
 
   listener->start();
 

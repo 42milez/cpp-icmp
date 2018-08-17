@@ -17,30 +17,23 @@
 
 namespace network
 {
-  using std::function;
-  using std::shared_ptr;
-  using std::string;
-  using std::vector;
-
-  using spdlog::logger;
-
   class RawSocketIO {
   public:
-    RawSocketIO(const string device);
+    RawSocketIO(const std::string device);
     ~RawSocketIO();
-    void wait(function<void()> fn);
+    void wait(std::function<void()> fn);
   private:
     void create_socket();
     void setup_multiplexer();
 
     static const int NEVENTS;
 
-    string device_;
+    std::string device_;
     struct epoll_event ev_ret_[16];
     int fd_;
     int mux_;
 
-    shared_ptr<logger> logger_;
+    std::shared_ptr<spdlog::logger> logger_;
   };
 } // network
 

@@ -24,11 +24,9 @@
 
 using namespace network;
 
-using std::to_string;
-
 const int RawSocketIO::NEVENTS = 16;
 
-RawSocketIO::RawSocketIO(const string device) {
+RawSocketIO::RawSocketIO(const std::string device) {
   logger_ = spdlog::stdout_color_mt("RawSocketIO");
   create_socket();
   setup_multiplexer();
@@ -99,7 +97,7 @@ void RawSocketIO::setup_multiplexer() {
 #endif
 }
 
-void RawSocketIO::wait(function<void()> fn) {
+void RawSocketIO::wait(std::function<void()> fn) {
 #if defined(__linux__)
   int nfds = epoll_wait(mux_, ev_ret_, NEVENTS, -1);
   if (nfds <= 0) {

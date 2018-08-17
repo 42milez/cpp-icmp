@@ -8,22 +8,18 @@
 
 namespace core
 {
-  using std::function;
-  using std::thread;
-  using std::unique_ptr;
-
   class Worker {
   public:
     virtual ~Worker() = default;
     virtual void start() = 0;
     virtual void stop() = 0;
   protected:
-    void assign(function<void()> fn);
+    void assign(std::function<void()> fn);
     void run();
     void terminate();
-    function<void()> fn_;
+    std::function<void()> fn_;
     bool is_abort_ { false };
-    unique_ptr<thread> thread_;
+    std::unique_ptr<std::thread> thread_;
   };
 } // core
 

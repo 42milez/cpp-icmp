@@ -14,9 +14,6 @@ namespace config
 {
   namespace nw = network;
 
-  using std::string;
-  using std::unique_ptr;
-
   using InAddr = struct in_addr;
 
   using Param = struct {
@@ -24,9 +21,9 @@ namespace config
     InAddr ip;
     InAddr vip;
     InAddr vmask;
-    string device;
-    unique_ptr<nw::MAC> mac;
-    unique_ptr<nw::MAC> vmac;
+    std::string device;
+    std::unique_ptr<nw::MAC> mac;
+    std::unique_ptr<nw::MAC> vmac;
     int mtu;
     int ttl;
   };
@@ -36,13 +33,13 @@ namespace config
 
   class Config {
   public:
-    Config(const string& file_path);
+    Config(const std::string& file_path);
     int is_target_ip_addr(InAddr &in_addr);
     int is_same_subnet(InAddr &addr);
-    string device();
+    std::string device();
   private:
-    void read_param(const string& fname);
-    unique_ptr<Param> param_;
+    void read_param(const std::string& fname);
+    std::unique_ptr<Param> param_;
   };
 } // config
 

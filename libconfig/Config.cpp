@@ -12,14 +12,11 @@ namespace fs = boost::filesystem;
 namespace pt = boost::property_tree;
 namespace nw = network;
 
-using std::invalid_argument;
-using std::make_unique;
-
-Config::Config(const string& file_path) {
+Config::Config(const std::string& file_path) {
   if (!fs::exists(file_path)) {
-    throw invalid_argument("Invalid file path.");
+    throw std::invalid_argument("Invalid file path.");
   }
-  param_ = make_unique<Param>();
+  param_ = std::make_unique<Param>();
   read_param(file_path);
 }
 
@@ -31,36 +28,36 @@ int Config::is_same_subnet(InAddr &addr) {
   return 0;
 }
 
-void Config::read_param(const string& filename) {
+void Config::read_param(const std::string& filename) {
   pt::ptree prop;
   read_json(filename, prop);
 
-  if (auto val = prop.get_optional<string>("network.gateway")) {
+  if (auto val = prop.get_optional<std::string>("network.gateway")) {
     param_->gateway.s_addr = inet_addr(val.get().c_str());
   } else {
-    throw invalid_argument("Invalid gateway address.");
+    throw std::invalid_argument("Invalid gateway address.");
   }
 
-  if (auto val = prop.get_optional<string>("network.vip")) {
+  if (auto val = prop.get_optional<std::string>("network.vip")) {
     param_->vip.s_addr = inet_addr(val.get().c_str());
   } else {
-    throw invalid_argument("Invalid virtual IP address.");
+    throw std::invalid_argument("Invalid virtual IP address.");
   }
 
-  if (auto val = prop.get_optional<string>("network.vmask")) {
+  if (auto val = prop.get_optional<std::string>("network.vmask")) {
     param_->vmask.s_addr = inet_addr(val.get().c_str());
   } else {
-    throw invalid_argument("Invalid virtual netmask.");
+    throw std::invalid_argument("Invalid virtual netmask.");
   }
 
-  if (auto val = prop.get_optional<string>("network.device")) {
+  if (auto val = prop.get_optional<std::string>("network.device")) {
     param_->device = val.get();
   } else {
-    throw invalid_argument("Invalid device name.");
+    throw std::invalid_argument("Invalid device name.");
   }
 
-  if (auto val = prop.get_optional<string>("network.vmac")) {
-    param_->vmac = make_unique<nw::MAC>(val.get());
+  if (auto val = prop.get_optional<std::string>("network.vmac")) {
+    param_->vmac = std::make_unique<nw::MAC>(val.get());
   }
 
   if (auto val = prop.get_optional<int>("network.mtu")) {
@@ -76,6 +73,6 @@ void Config::read_param(const string& filename) {
   }
 }
 
-string Config::device() {
+std::string Config::device() {
   return param_->device;
 }

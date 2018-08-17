@@ -2,10 +2,8 @@
 
 using namespace core;
 
-using std::make_unique;
-
-Listener::Listener(const string device) {
-  listener_ = make_unique<nw::RawSocketIO>(device);
+Listener::Listener(const std::string device) {
+  listener_ = std::make_unique<nw::RawSocketIO>(device);
   assign([this]{
     listener_->wait([this](){
       // ...

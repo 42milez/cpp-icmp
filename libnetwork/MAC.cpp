@@ -9,24 +9,16 @@ using namespace network;
 
 namespace bst = boost;
 
-using std::invalid_argument;
-using std::regex;
-using std::smatch;
+const std::string MAC::MAC_ADDRESS_DELIMITER = ":";
+const std::string MAC::MAC_ADDRESS_PATTERN = "[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}";
 
-const string MAC::MAC_ADDRESS_DELIMITER = ":";
-const string MAC::MAC_ADDRESS_PATTERN = "[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}";
+MAC::MAC(const std::string mac) {
+  std::regex pattern(MAC_ADDRESS_PATTERN);
+  std::smatch match;
 
-MAC::MAC(const string mac) {
-  regex pattern(MAC_ADDRESS_PATTERN);
-  smatch match;
-
-  if (regex_match(mac, match, pattern)) {
+  if (std::regex_match(mac, match, pattern)) {
     bst::split(mac_, mac, bst::is_any_of(MAC_ADDRESS_DELIMITER));
   } else {
-    throw invalid_argument("Invalid MAC address.");
+    throw std::invalid_argument("Invalid MAC address.");
   }
 };
-
-MAC::MAC(string& oct1, string& oct2, string& oct3, string& oct4, string& oct5, string& oct6) {
-  mac_ = { move(oct1), move(oct2), move(oct3), move(oct4), move(oct5), move(oct6) };
-}

@@ -1,14 +1,13 @@
-//
-// Created by Akihiro TAKASE on 2018/08/16.
-//
-
 #ifndef ICMP_IP_H
 #define ICMP_IP_H
 
 
-class IP {
+namespace network
+{
+  class IP {
 
-};
+  };
+} // network
 
 
-#endif //ICMP_IP_H
+#endif // ICMP_IP_H
