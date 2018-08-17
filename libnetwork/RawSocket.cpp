@@ -28,6 +28,7 @@ using std::endl;
 using std::to_string;
 
 RawSocket::RawSocket(int port) {
+  logger_ = spdlog::stdout_color_mt("RawSocket");
   create_socket();
   setup_multiplexer();
 }
@@ -106,7 +107,7 @@ void RawSocket::wait() {
   }
   for (auto i = 0; i < nfds; i++) {
     if (ev_ret_[i].data.fd == fd_) {
-      // ...
+      logger_->info("test");
     }
   }
 #else

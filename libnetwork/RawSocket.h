@@ -23,6 +23,7 @@ namespace network
     int mux_;
     static const int NEVENTS;
     struct epoll_event ev_ret_[16];
+    std::shared_ptr<spdlog::logger> logger_;
   };
 } // network
 
