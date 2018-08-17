@@ -18,7 +18,7 @@
   // ...
 #endif
 
-#include "NetworkIO.h"
+#include "RawSocket.h"
 
 using namespace network;
 
@@ -38,7 +38,7 @@ NetworkIO::~NetworkIO() {
   close(fd_);
 }
 
-void NetworkIO::create_raw_socket() {
+void NetworkIO::create_socket() {
 #if defined(__linux__)
   struct ifreq if_req;
   struct sockaddr_ll sa;

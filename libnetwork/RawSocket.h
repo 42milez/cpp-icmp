@@ -15,7 +15,7 @@ namespace network
     ~NetworkIO();
     void wait_for_read(const function<void()>& fn);
   private:
-    void create_raw_socket();
+    void create_socket();
     void setup_multiplexer();
     int fd_;
     int mux_;
