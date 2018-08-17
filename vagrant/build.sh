@@ -34,8 +34,8 @@ cp /home/vagrant/build/icmp/icmp ${DIR_ICMP2}
 chmod 0700 ${DIR_ICMP1}/icmp
 chmod 0700 ${DIR_ICMP2}/icmp
 
-cp /vagrant/config.sample.json ${DIR_ICMP1}/config.json
-cp /vagrant/config.sample.json ${DIR_ICMP2}/config.json
+cp /vagrant/config.template.json ${DIR_ICMP1}/config.json
+cp /vagrant/config.template.json ${DIR_ICMP2}/config.json
 
 DEVICE=enp0s3
 GATEWAY=10.0.2.2

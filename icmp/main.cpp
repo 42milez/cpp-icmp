@@ -1,6 +1,7 @@
 #include <iostream>
 #include <memory>
 #include <stdexcept>
+#include <thread>
 
 #include <signal.h>
 
@@ -82,7 +83,7 @@ int main(int argc, char** argv) {
   signal(SIGABRT, &ExitHandler::exitHandler);
   signal(SIGTERM, &ExitHandler::exitHandler);
   signal(SIGINT, &ExitHandler::exitHandler);
-  signal(SIGPIPE,SIG_IGN);
+  signal(SIGPIPE, SIG_IGN);
 
   ExitHandler exitHandler;
 
@@ -91,8 +92,7 @@ int main(int argc, char** argv) {
   listener->start();
 
   while (!exitHandler.shouldExit()) {
-    // do something
-    // ...
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
   }
 
   listener->stop();
