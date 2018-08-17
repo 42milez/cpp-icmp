@@ -3,9 +3,9 @@
 using namespace core;
 
 Listener::Listener() {
-  listener_ = make_unique<nw::NetworkIO>();
+  listener_ = make_unique<nw::RawSocket>();
   assign([this]{
-    listener_->wait_for_read([this](){
+    listener_->wait([this](){
       // ...
     });
   });

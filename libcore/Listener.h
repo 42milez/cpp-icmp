@@ -4,7 +4,7 @@
 
 #include <memory>
 
-#include "NetworkIO.h"
+#include "RawSocket.h"
 #include "Worker.h"
 
 namespace core
@@ -18,7 +18,7 @@ namespace core
     void start() override;
     void stop() override;
   private:
-    unique_ptr<nw::NetworkIO> listener_;
+    unique_ptr<nw::RawSocket> listener_;
   };
 } // core
 
