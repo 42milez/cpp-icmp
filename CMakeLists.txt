@@ -34,5 +34,6 @@ include_directories(${CMAKE_SOURCE_DIR})
 add_subdirectory(libconfig)
 add_subdirectory(libcore)
 add_subdirectory(libnetwork)
+add_subdirectory(libutil)
 
 add_subdirectory(icmp)

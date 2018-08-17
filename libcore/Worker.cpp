@@ -12,7 +12,6 @@ void Worker::run() {
       for (;;) {
         if (is_abort) break;
         fn();
-        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
       }
     });
   }

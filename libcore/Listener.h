@@ -5,8 +5,9 @@
 #include <memory>
 #include <string>
 
-#include "libnetwork/RawSocketIO.h"
+#include <spdlog/spdlog.h>
 
+#include "libnetwork/RawSocketIO.h"
 #include "Worker.h"
 
 namespace core
@@ -21,6 +22,9 @@ namespace core
     void stop() override;
   private:
     std::unique_ptr<nw::RawSocketIO> listener_;
+    u_int8_t buf_[2048];
+
+    std::shared_ptr<spdlog::logger> logger_;
   };
 } // core
 

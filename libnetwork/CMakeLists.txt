@@ -3,4 +3,4 @@ file(GLOB headers *.h)
 
 add_library(network STATIC ${sources} ${headers})
 
-target_link_libraries(network PRIVATE Boost::boost spdlog::spdlog)
+target_link_libraries(network PRIVATE util Boost::boost spdlog::spdlog)

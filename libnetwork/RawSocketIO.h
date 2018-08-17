@@ -21,15 +21,20 @@ namespace network
   public:
     RawSocketIO(const std::string device);
     ~RawSocketIO();
-    void wait(std::function<void()> fn);
+    void wait(std::function<void(const int fd)> fn);
   private:
-    void create_socket();
-    void setup_multiplexer();
+    int create_socket();
+    int setup_multiplexer();
 
     static const int NEVENTS;
 
     std::string device_;
+#if defined(__linux__)
     struct epoll_event ev_ret_[16];
+#else
+    // UNIX
+    // ...
+#endif
     int fd_;
     int mux_;
 

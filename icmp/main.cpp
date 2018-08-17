@@ -6,7 +6,9 @@
 #include <signal.h>
 
 #include <boost/program_options.hpp>
+#include <spdlog/spdlog.h>
 
+#include "libutil/InternalErrorException.h"
 #include "icmp/buildinfo.h"
 #include "libconfig/Config.h"
 #include "libcore/Listener.h"
@@ -33,6 +35,8 @@ namespace
 } // namespace
 
 int main(int argc, char** argv) {
+  auto logger = spdlog::stdout_color_mt("ICMP");
+
   po::options_description opt_desc("OPTIONS", 160);
   opt_desc.add_options()
     ("config,c", po::value<std::string>()->value_name("<file>"),
@@ -87,7 +91,14 @@ int main(int argc, char** argv) {
 
   ExitHandler exitHandler;
 
-  std::unique_ptr<core::Listener> listener = std::make_unique<core::Listener>(config->device());
+  std::unique_ptr<core::Listener> listener;
+
+  try {
+    listener = std::make_unique<core::Listener>(config->device());
+  } catch (util::InternalErrorException const& e) {
+    logger->critical(e.what());
+    return -1;
+  }
 
   listener->start();
 
