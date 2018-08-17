@@ -1,28 +1,30 @@
-#ifndef ICMP_NETWORKIO_H
-#define ICMP_NETWORKIO_H
+#ifndef ICMP_RAWSOCKET_H
+#define ICMP_RAWSOCKET_H
 
 
 #include <functional>
+
+#include "Socket.h"
 
 namespace network
 {
   using std::function;
   using std::vector;
 
-  class NetworkIO {
+  class RawSocket : public Socket {
   public:
-    NetworkIO(int port);
-    ~NetworkIO();
-    void wait_for_read(const function<void()>& fn);
+    RawSocket();
+    ~RawSocket();
+    void wait() override;
   private:
-    void create_socket();
-    void setup_multiplexer();
+    void create_socket() override;
+    void setup_multiplexer() override;
     int fd_;
     int mux_;
     static const int NEVENTS;
     struct epoll_event ev_ret_[16];
   };
-}
+} // network
 
 
-#endif // ICMP_NETWORKIO_H
+#endif // ICMP_RAWSOCKET_H

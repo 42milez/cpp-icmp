@@ -27,18 +27,16 @@ using std::cout;
 using std::endl;
 using std::to_string;
 
-const int NetworkIO::NEVENTS = 16;
-
-NetworkIO::NetworkIO(int port) {
+RawSocket::RawSocket(int port) {
   create_socket();
   setup_multiplexer();
 }
 
-NetworkIO::~NetworkIO() {
-  close(fd_);
+RawSocket::~RawSocket() {
+
 }
 
-void NetworkIO::create_socket() {
+void RawSocket::create_socket() {
 #if defined(__linux__)
   struct ifreq if_req;
   struct sockaddr_ll sa;
@@ -78,7 +76,7 @@ void NetworkIO::create_socket() {
 #endif
 }
 
-void NetworkIO::setup_multiplexer() {
+void RawSocket::setup_multiplexer() {
 #if defined(__linux__)
   mux_ = epoll_create(NEVENTS);
   if (epfd < 0) {
@@ -99,7 +97,7 @@ void NetworkIO::setup_multiplexer() {
 #endif
 }
 
-void NetworkIO::wait_for_read(const function<void()> &fn) {
+void RawSocket::wait() {
 #if defined(__linux__)
   int nfds = epoll_wait(mux_, ev_ret, NEVENTS, -1);
   if (nfds <= 0) {
@@ -108,7 +106,7 @@ void NetworkIO::wait_for_read(const function<void()> &fn) {
   }
   for (auto i = 0; i < nfds; i++) {
     if (ev_ret_[i].data.fd == fd_) {
-      fn();
+      // ...
     }
   }
 #else
