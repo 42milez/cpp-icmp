@@ -29,14 +29,15 @@ using namespace network;
 const int RawSocketIO::NEVENTS = 16;
 
 RawSocketIO::RawSocketIO(const std::string device) {
+  device_ = device;
   logger_ = spdlog::stdout_color_mt("RawSocketIO");
 
   if (create_socket()) {
-    throw util::InternalErrorException{ "Cannot create socket." };
+    throw util::InternalErrorException{ "Cannot create socket. (1)" };
   }
 
   if (setup_multiplexer()) {
-    throw util::InternalErrorException{ "Cannot create socket." };
+    throw util::InternalErrorException{ "Cannot create socket. (2)" };
   }
 }
 
@@ -57,7 +58,7 @@ int RawSocketIO::create_socket() {
 
   strcpy(if_req.ifr_name, device_.c_str());
   if (ioctl(fd_, SIOCGIFINDEX, &if_req) < 0) {
-    logger_->critical("ioctl1");
+    logger_->critical("ioctl (1)");
     close(fd_);
     return -1;
   }
@@ -72,14 +73,14 @@ int RawSocketIO::create_socket() {
   }
 
   if (ioctl(fd_, SIOCGIFFLAGS, &if_req) < 0) {
-    logger_->critical("ioctl2");
+    logger_->critical("ioctl (2)");
     close(fd_);
     return -1;
   }
 
   if_req.ifr_flags = if_req.ifr_flags|IFF_PROMISC|IFF_UP;
   if (ioctl(fd_, SIOCSIFFLAGS, &if_req) < 0) {
-    logger_->critical("ioctl3");
+    logger_->critical("ioctl (3)");
     close(fd_);
     return -1;
   }
