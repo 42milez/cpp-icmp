@@ -28,3 +28,5 @@ fi
 
 export LD_PRELOAD="/lib/x86_64-linux-gnu/libSegFault.so"
 export SEGFAULT_SIGNALS="all"
+
+alias lldb='/usr/bin/lldb-6.0'
