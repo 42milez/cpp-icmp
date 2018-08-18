@@ -58,10 +58,20 @@ int main(int argc, char** argv) {
     return -1;
   }
 
+  if (argc <= 1) {
+    std::cout << "Requires at least 1 argument." << std::endl << std::endl;
+    std::cout << "USAGE:" << std::endl
+              << "   icmp [options]" << std::endl << std::endl;
+    std::cout << opt_desc;
+    return -1;
+  }
+
   for (const auto &option : unrecognised_options) {
     std::cerr << "Invalid argument: " << option << "\n";
     return -1;
   }
+
+  std::unique_ptr<config::Config> config;
 
   if (vm.count("h") || vm.count("help")) {
     std::cout << "NAME:" << std::endl
@@ -70,11 +80,7 @@ int main(int argc, char** argv) {
          << "   icmp [options]" << std::endl << std::endl;
     std::cout << opt_desc;
     return 0;
-  }
-
-  std::unique_ptr<config::Config> config;
-
-  if (vm.count("config")) {
+  } else if (vm.count("config")) {
     try {
       config = std::make_unique<config::Config>(vm["config"].as<std::string>());
     } catch (std::invalid_argument const &e) {

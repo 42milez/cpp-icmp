@@ -16,7 +16,7 @@ namespace core
 
   class Listener : public Worker {
   public:
-    explicit Listener(const std::string device);
+    explicit Listener(std::string device);
     ~Listener() override;
     void start() override;
     void stop() override;

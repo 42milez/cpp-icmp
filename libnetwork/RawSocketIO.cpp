@@ -41,6 +41,7 @@ RawSocketIO::RawSocketIO(const std::string device) {
 }
 
 RawSocketIO::~RawSocketIO() {
+  logger_->info("デストラクタ！");
   close(fd_);
 }
 
@@ -50,13 +51,14 @@ int RawSocketIO::create_socket() {
   struct sockaddr_ll sa;
 
   if ((fd_ = socket(AF_PACKET, SOCK_RAW, htons(ETH_P_ALL))) < 0) {
-    logger_->error("socket");
+    logger_->critical("socket");
     return -1;
   }
 
   strcpy(if_req.ifr_name, device_.c_str());
   if (ioctl(fd_, SIOCGIFINDEX, &if_req) < 0) {
-    logger_->error("ioctl");
+    logger_->critical("ioctl1");
+    close(fd_);
     return -1;
   }
 
@@ -64,18 +66,21 @@ int RawSocketIO::create_socket() {
   sa.sll_protocol = htons(ETH_P_ALL);
   sa.sll_ifindex = if_req.ifr_ifindex;
   if (bind(fd_, (struct sockaddr *) &sa, sizeof(sa)) < 0) {
-    logger_->error("bind");
+    logger_->critical("bind");
+    close(fd_);
     return -1;
   }
 
   if (ioctl(fd_, SIOCGIFFLAGS, &if_req) < 0) {
-    logger_->error("ioctl");
+    logger_->critical("ioctl2");
+    close(fd_);
     return -1;
   }
 
   if_req.ifr_flags = if_req.ifr_flags|IFF_PROMISC|IFF_UP;
   if (ioctl(fd_, SIOCSIFFLAGS, &if_req) < 0) {
-    logger_->error("ioctl");
+    logger_->critical("ioctl3");
+    close(fd_);
     return -1;
   }
 #else
