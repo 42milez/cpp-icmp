@@ -19,7 +19,7 @@ fi
 cd ${DIR_BUILD}
 
 # https://cmake.org/cmake/help/v3.12/generator/CodeBlocks.html
-cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=/usr/bin/ninja -DCMAKE_C_COMPILER=/usr/bin/clang-6.0 -DCMAKE_CXX_COMPILER=/usr/bin/clang++-6.0 -G "CodeBlocks - Ninja" /vagrant
+cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=/usr/bin/ninja -DCMAKE_C_COMPILER=/usr/bin/clang-6.0 -DCMAKE_CXX_COMPILER=/usr/bin/clang++-6.0 -DCMAKE_CXX_FLAGS="-g" -G "CodeBlocks - Ninja" /vagrant
 cmake --build . --target icmp -- -j 2
 
 cd
