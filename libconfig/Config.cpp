@@ -46,7 +46,7 @@ void Config::read_param(const std::string& filename) {
   if (auto val = prop.get_optional<std::string>("network.vip")) {
     param_->vip.s_addr = inet_addr(val.get().c_str());
   } else {
-    throw std::invalid_argument("Invalid virtual IP address.");
+    throw std::invalid_argument("Invalid virtual ICMP address.");
   }
 
   if (auto val = prop.get_optional<std::string>("network.vmask")) {
