@@ -20,13 +20,18 @@ Config::Config(const std::string& file_path) {
   read_param(file_path);
 }
 
-int Config::is_target_ip_addr(InAddr &in_addr) {
-  return 0;
+std::string Config::device() {
+  return param_->device;
 }
 
-int Config::is_same_subnet(InAddr &addr) {
-  return 0;
+const InAddr& Config::vip() {
+  return param_->vip;
 }
+
+const std::unique_ptr<nw::MAC>& Config::vmac() {
+  return param_->vmac;
+}
+
 
 void Config::read_param(const std::string& filename) {
   pt::ptree prop;
@@ -71,8 +76,4 @@ void Config::read_param(const std::string& filename) {
   } else {
     param_->ttl = DEFAULT_TTL;
   }
-}
-
-std::string Config::device() {
-  return param_->device;
 }

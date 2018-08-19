@@ -7,6 +7,7 @@
 
 #include <spdlog/spdlog.h>
 
+#include "libnetwork/EthernetIO.h"
 #include "libnetwork/RawSocketIO.h"
 #include "Worker.h"
 
@@ -22,6 +23,7 @@ namespace core
     void stop() override;
   private:
     std::unique_ptr<nw::RawSocketIO> listener_;
+    std::unique_ptr<nw::EthernetIO> eth_;
     u_int8_t buf_[2048];
 
     std::shared_ptr<spdlog::logger> logger_;

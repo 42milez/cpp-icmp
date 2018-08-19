@@ -7,9 +7,9 @@ Listener::Listener(const std::string device) {
   assign([this]{
     listener_->wait([this](const int fd){
       if (auto len = read(fd, buf_, sizeof(buf_)) <= 0) {
-        logger_->error("read");
+        this->logger_->error("read");
       } else {
-        logger_->error("ether_read");
+        eth_->recv(buf_, len);
       }
     });
   });
