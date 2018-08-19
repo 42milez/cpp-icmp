@@ -10,6 +10,7 @@
 #include <spdlog/spdlog.h>
 
 #include "libconfig/Config.h"
+#include "Arp.h"
 
 namespace network
 {
@@ -22,13 +23,11 @@ namespace network
     EthernetIO(std::shared_ptr<cfg::Config> config);
     int recv(u_int8_t* in_ptr, int in_len);
   private:
-    int arp_recv(const ether_header *eh, u_int8_t *data);
-    int is_target_ip_addr(struct in_addr *addr);
-
+    int is_target_ip_addr(const struct in_addr *addr);
+    int is_same_subnet(const struct in_addr *addr);
     static const uint8_t BCAST_MAC[];
-
+    std::unique_ptr<Arp> arp_;
     std::shared_ptr<cfg::Config> config_;
-
     std::shared_ptr<spdlog::logger> logger_;
   };
 } // network

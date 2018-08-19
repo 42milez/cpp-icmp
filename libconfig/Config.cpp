@@ -32,6 +32,9 @@ const std::unique_ptr<nw::MAC>& Config::vmac() {
   return param_->vmac;
 }
 
+const InAddr& Config::vmask() {
+  return param_->vmask;
+}
 
 void Config::read_param(const std::string& filename) {
   pt::ptree prop;

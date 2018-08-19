@@ -37,6 +37,7 @@ namespace config
     std::string device();
     const InAddr& vip();
     const std::unique_ptr<nw::MAC>& vmac();
+    const InAddr& vmask();
   private:
     void read_param(const std::string& fname);
     std::unique_ptr<Param> param_;
