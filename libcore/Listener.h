@@ -13,17 +13,19 @@
 
 namespace core
 {
+  namespace cfg = config;
   namespace nw = network;
 
   class Listener : public Worker {
   public:
-    explicit Listener(std::string device);
+    explicit Listener(std::shared_ptr<cfg::Config> config);
     ~Listener() override;
     void start() override;
     void stop() override;
   private:
-    std::unique_ptr<nw::RawSocketIO> listener_;
+    std::shared_ptr<cfg::Config> config_;
     std::unique_ptr<nw::EthernetIO> eth_;
+    std::unique_ptr<nw::RawSocketIO> listener_;
     u_int8_t buf_[2048];
 
     std::shared_ptr<spdlog::logger> logger_;

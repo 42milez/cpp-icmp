@@ -2,6 +2,7 @@
 #define ICMP_ARP_H
 
 
+#include <arpa/inet.h>
 #include <netinet/if_ether.h>
 
 #include <spdlog/spdlog.h>

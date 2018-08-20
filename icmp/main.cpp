@@ -13,6 +13,7 @@
 #include "libconfig/Config.h"
 #include "libcore/Listener.h"
 
+namespace cfg = config;
 namespace po = boost::program_options;
 
 namespace
@@ -71,7 +72,7 @@ int main(int argc, char** argv) {
     return -1;
   }
 
-  std::unique_ptr<config::Config> config;
+  std::shared_ptr<cfg::Config> config;
 
   if (vm.count("h") || vm.count("help")) {
     std::cout << "NAME:" << std::endl
@@ -82,7 +83,7 @@ int main(int argc, char** argv) {
     return 0;
   } else if (vm.count("config")) {
     try {
-      config = std::make_unique<config::Config>(vm["config"].as<std::string>());
+      config = std::make_shared<config::Config>(vm["config"].as<std::string>());
     } catch (std::invalid_argument const &e) {
       std::cerr << "Invalid parameter: " << e.what() << std::endl;
       return -1;
@@ -100,7 +101,7 @@ int main(int argc, char** argv) {
   std::unique_ptr<core::Listener> listener;
 
   try {
-    listener = std::make_unique<core::Listener>(config->device());
+    listener = std::make_unique<core::Listener>(config);
   } catch (util::InternalErrorException const& e) {
     logger->critical(e.what());
     return -1;
