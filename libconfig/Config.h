@@ -34,6 +34,8 @@ namespace config
   class Config {
   public:
     Config(const std::string& file_path);
+    int is_target_ip_addr(const struct in_addr *addr);
+    int is_same_subnet(const struct in_addr *addr);
     std::string device();
     const InAddr& vip();
     const std::unique_ptr<nw::MAC>& vmac();

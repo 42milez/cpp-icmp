@@ -10,13 +10,13 @@ namespace network
 {
   class MAC {
   public:
-    explicit MAC(std::string mac);
-    std::unique_ptr<std::string> mac();
+    explicit MAC(const std::string& mac);
+    const std::string& as_str();
+    const std::vector<u_int8_t>& as_hex();
   private:
-    static const std::string MAC_ADDRESS_DELIMITER;
-    static const std::string MAC_ADDRESS_PATTERN;
-
     std::vector<std::string> mac_;
+    std::string mac_str_;
+    std::vector<u_int8_t> mac_hex_;
   };
 } // network
 

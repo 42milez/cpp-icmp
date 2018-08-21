@@ -2,18 +2,38 @@
 #define ICMP_ARP_H
 
 
+#include <vector>
+
 #include <arpa/inet.h>
 #include <netinet/if_ether.h>
 
 #include <spdlog/spdlog.h>
 
+#include "libconfig/Config.h"
+
 namespace network
 {
+  namespace cfg = config;
+
+  using EthArp = struct ether_arp;
+  using EthHeader = struct ether_header;
+
+  using ArpEntry = struct {
+    time_t timestamp;
+    u_int8_t mac[6];
+    struct in_addr ipaddr;
+  };
+
   class Arp {
   public:
-    Arp();
+    Arp(std::shared_ptr<cfg::Config> config);
     int recv(const ether_header *eh, u_int8_t *data);
   private:
+    void add_table();
+    void send(int fd, const EthHeader *eh, const EthArp *ea, const std::vector<u_int8_t>& vmac);
+    static const int N_ARP_TABLES;
+    ArpEntry arp_entries_;
+    std::shared_ptr<cfg::Config> config_;
     std::shared_ptr<spdlog::logger> logger_;
   };
 } // network

@@ -10,22 +10,32 @@ using namespace network;
 
 namespace bst = boost;
 
-const std::string MAC::MAC_ADDRESS_DELIMITER = ":";
-const std::string MAC::MAC_ADDRESS_PATTERN = "[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}";
+const std::string MAC_ADDRESS_DELIMITER = ":";
+const std::string MAC_ADDRESS_PATTERN = "[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}";
 
-MAC::MAC(const std::string mac) {
+MAC::MAC(const std::string& mac) {
+  // store as string separated by each octet
   std::regex pattern(MAC_ADDRESS_PATTERN);
   std::smatch match;
-
   if (std::regex_match(mac, match, pattern)) {
     bst::split(mac_, mac, bst::is_any_of(MAC_ADDRESS_DELIMITER));
   } else {
     throw std::invalid_argument("Invalid MAC address.");
   }
+
+  // store as hexadecimal separated by each octet
+  for (auto const& oct : mac_) {
+    mac_hex_.push_back(strtol(oct.c_str(), nullptr, 16));
+  }
+
+  // store as string joined by colon
+  mac_str_ = mac;
 };
 
-std::unique_ptr<std::string> MAC::mac() {
-  std::ostringstream os;
-  std::copy(mac_.begin(), mac_.end(), std::ostream_iterator<std::string>(os, ":"));
-  return std::move(std::make_unique<std::string>(os.str()));
+const std::string& MAC::as_str() {
+  return mac_str_;
+}
+
+const std::vector<u_int8_t>& MAC::as_hex() {
+  return mac_hex_;
 }

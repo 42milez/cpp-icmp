@@ -36,6 +36,22 @@ const InAddr& Config::vmask() {
   return param_->vmask;
 }
 
+int Config::is_target_ip_addr(const struct in_addr *addr) {
+  if (param_->vip.s_addr == addr->s_addr) {
+    return 1;
+  }
+  return 0;
+}
+
+int Config::is_same_subnet(const struct in_addr *addr) {
+  if ((addr->s_addr & param_->vmask.s_addr)==(param_->vip.s_addr & param_->vmask.s_addr)) {
+    return 1;
+  }
+  else {
+    return 0;
+  }
+}
+
 void Config::read_param(const std::string& filename) {
   pt::ptree prop;
   read_json(filename, prop);
