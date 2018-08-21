@@ -19,14 +19,11 @@ namespace network
 {
   class RawSocket {
   public:
-    RawSocket(const std::string device);
+    RawSocket(const std::string& device);
     ~RawSocket();
-    void wait(std::function<void(const int fd)> fn);
+    int fd();
   private:
-    int create_socket();
-    int setup_multiplexer();
-
-    static const int NEVENTS;
+    void create_socket();
 
     std::string device_;
 #if defined(__linux__)
