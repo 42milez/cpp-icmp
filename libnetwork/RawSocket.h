@@ -1,5 +1,5 @@
-#ifndef ICMP_RAWSOCKETIO_H
-#define ICMP_RAWSOCKETIO_H
+#ifndef ICMP_RAWSOCKET_H
+#define ICMP_RAWSOCKET_H
 
 
 #include <functional>
@@ -17,10 +17,10 @@
 
 namespace network
 {
-  class RawSocketIO {
+  class RawSocket {
   public:
-    RawSocketIO(const std::string device);
-    ~RawSocketIO();
+    RawSocket(const std::string device);
+    ~RawSocket();
     void wait(std::function<void(const int fd)> fn);
   private:
     int create_socket();
@@ -43,4 +43,4 @@ namespace network
 } // network
 
 
-#endif // ICMP_RAWSOCKETIO_H
+#endif // ICMP_RAWSOCKET_H

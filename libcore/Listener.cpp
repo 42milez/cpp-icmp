@@ -7,7 +7,7 @@ using namespace core;
 Listener::Listener(std::shared_ptr<cfg::Config> config) {
   config_ = config;
   eth_ = std::make_unique<nw::EthernetIO>(config_);
-  listener_ = std::make_unique<nw::RawSocketIO>(config_->device());
+  listener_ = std::make_unique<nw::RawSocket>(config_->device());
   logger_ = spdlog::stdout_color_mt("Listener");
   assign([this]{
     listener_->wait([this](const int fd){

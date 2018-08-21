@@ -22,15 +22,15 @@
 
 #include "libutil/InternalErrorException.h"
 
-#include "RawSocketIO.h"
+#include "RawSocket.h"
 
 using namespace network;
 
-const int RawSocketIO::NEVENTS = 16;
+const int RawSocket::NEVENTS = 16;
 
-RawSocketIO::RawSocketIO(const std::string device) {
+RawSocket::RawSocket(const std::string device) {
   device_ = device;
-  logger_ = spdlog::stdout_color_mt("RawSocketIO");
+  logger_ = spdlog::stdout_color_mt("RawSocket");
 
   if (create_socket()) {
     throw util::InternalErrorException{ "Cannot create socket. (1)" };
@@ -41,12 +41,12 @@ RawSocketIO::RawSocketIO(const std::string device) {
   }
 }
 
-RawSocketIO::~RawSocketIO() {
+RawSocket::~RawSocket() {
   logger_->info("デストラクタ！");
   close(fd_);
 }
 
-int RawSocketIO::create_socket() {
+int RawSocket::create_socket() {
 #if defined(__linux__)
   struct ifreq if_req;
   struct sockaddr_ll sa;
@@ -92,7 +92,7 @@ int RawSocketIO::create_socket() {
   return 0;
 }
 
-int RawSocketIO::setup_multiplexer() {
+int RawSocket::setup_multiplexer() {
 #if defined(__linux__)
   mux_ = epoll_create(NEVENTS);
   if (mux_ < 0) {
@@ -115,7 +115,7 @@ int RawSocketIO::setup_multiplexer() {
   return 0;
 }
 
-void RawSocketIO::wait(std::function<void(const int fd)> fn) {
+void RawSocket::wait(std::function<void(const int fd)> fn) {
 #if defined(__linux__)
   int nfds = epoll_wait(mux_, ev_ret_, NEVENTS, -1);
   if (nfds <= 0) {

@@ -8,7 +8,7 @@
 #include <spdlog/spdlog.h>
 
 #include "libnetwork/EthernetIO.h"
-#include "libnetwork/RawSocketIO.h"
+#include "libnetwork/RawSocket.h"
 #include "Worker.h"
 
 namespace core
@@ -25,7 +25,7 @@ namespace core
   private:
     std::shared_ptr<cfg::Config> config_;
     std::unique_ptr<nw::EthernetIO> eth_;
-    std::unique_ptr<nw::RawSocketIO> listener_;
+    std::unique_ptr<nw::RawSocket> listener_;
     u_int8_t buf_[2048];
 
     std::shared_ptr<spdlog::logger> logger_;
