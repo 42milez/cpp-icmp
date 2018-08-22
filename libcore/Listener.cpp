@@ -7,6 +7,7 @@ const int NEVENTS = 16;
 
 Listener::Listener(std::shared_ptr<cfg::Config> config) {
   config_ = config;
+  arp_ = std::make_unique<nw::Arp>(config_);
   eth_ = std::make_unique<nw::EthernetIO>(config_);
   sock_ = std::make_unique<nw::RawSocket>(config_->device());
   logger_ = spdlog::stdout_color_mt("Listener");
@@ -79,8 +80,6 @@ void Listener::wait() {
           // icmp
           // ...
         }
-
-        this->eth_->recv(buf_, len);
       }
     }
   }

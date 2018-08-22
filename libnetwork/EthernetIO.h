@@ -19,9 +19,7 @@ namespace network
   class EthernetIO {
   public:
     EthernetIO(std::shared_ptr<cfg::Config> config);
-    int recv(u_int8_t* in_ptr, int in_len);
   private:
-    std::unique_ptr<Arp> arp_;
     std::shared_ptr<cfg::Config> config_;
     std::shared_ptr<spdlog::logger> logger_;
   };
