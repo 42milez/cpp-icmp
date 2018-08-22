@@ -25,17 +25,17 @@ namespace network
   private:
     void create_socket();
 
-    std::string device_;
 #if defined(__linux__)
     struct epoll_event ev_ret_[16];
 #else
     // UNIX
     // ...
 #endif
-    int fd_;
-    int mux_;
 
     std::shared_ptr<spdlog::logger> logger_;
+    std::string device_;
+    int fd_;
+    int mux_;
   };
 } // network
 

@@ -31,10 +31,9 @@ namespace network
   private:
     void add_table();
     void send(int fd, const EthHeader *eh, const EthArp *ea, const std::vector<u_int8_t>& vmac);
-    static const int N_ARP_TABLES;
-    ArpEntry arp_entries_;
-    std::shared_ptr<cfg::Config> config_;
     std::shared_ptr<spdlog::logger> logger_;
+    std::shared_ptr<cfg::Config> config_;
+    ArpEntry arp_entries_;
   };
 } // network
 

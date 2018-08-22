@@ -4,11 +4,11 @@ using namespace network;
 
 namespace cfg = config;
 
-const int Arp::N_ARP_TABLES = 16;
+const int N_ARP_TABLES = 16;
 
 Arp::Arp(std::shared_ptr<cfg::Config> config) {
-  config_ = config;
   logger_ = spdlog::stdout_color_mt("Arp");
+  config_ = config;
 }
 
 void Arp::add_table() {
@@ -47,5 +47,5 @@ int Arp::recv(const ether_header *eh, u_int8_t *data) {
 }
 
 void Arp::send(int fd, const EthHeader *eh, const EthArp *ea, const std::vector<u_int8_t>& vmac) {
-
+  // ...
 }

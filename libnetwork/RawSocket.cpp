@@ -1,20 +1,20 @@
 #include <cstring>
 
 #if defined(__linux__)
-  #include <stdio.h>
-  #include <ctype.h>
-  #include <unistd.h>
-  #include <stdlib.h>
-  #include <string.h>
-  #include <limits.h>
-  #include <time.h>
-  #include <sys/ioctl.h>
-  #include <netpacket/packet.h>
+  #include <arpa/inet.h>
+  #include <linux/if.h>
+  #include <netinet/if_ether.h>
   #include <netinet/ip.h>
   #include <netinet/ip_icmp.h>
-  #include <netinet/if_ether.h>
-  #include <linux/if.h>
-  #include <arpa/inet.h>
+  #include <netpacket/packet.h>
+  #include <sys/ioctl.h>
+  #include <ctype.h>
+  #include <limits.h>
+  #include <stdio.h>
+  #include <stdlib.h>
+  #include <string.h>
+  #include <time.h>
+  #include <unistd.h>
 #else
   // UNIX
   // ...
@@ -27,8 +27,8 @@
 using namespace network;
 
 RawSocket::RawSocket(const std::string& device) {
-  device_ = device;
   logger_ = spdlog::stdout_color_mt("RawSocket");
+  device_ = device;
 
   create_socket();
 }

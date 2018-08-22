@@ -32,10 +32,10 @@ MAC::MAC(const std::string& mac) {
   mac_str_ = mac;
 };
 
-const std::string& MAC::as_str() {
-  return mac_str_;
-}
-
 const std::vector<u_int8_t>& MAC::as_hex() {
   return mac_hex_;
+}
+
+const std::string& MAC::as_str() {
+  return mac_str_;
 }

@@ -18,9 +18,8 @@ namespace network
 
   class EthernetIO {
   public:
-    EthernetIO(std::shared_ptr<cfg::Config> config);
+    EthernetIO();
   private:
-    std::shared_ptr<cfg::Config> config_;
     std::shared_ptr<spdlog::logger> logger_;
   };
 } // network

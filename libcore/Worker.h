@@ -17,8 +17,8 @@ namespace core
     void assign(std::function<void()> fn);
     void run();
     void terminate();
-    std::function<void()> fn_;
     bool is_abort_ { false };
+    std::function<void()> fn_;
     std::unique_ptr<std::thread> thread_;
   };
 } // core

@@ -14,9 +14,8 @@
 
 #include <spdlog/spdlog.h>
 
-#include "libnetwork/EthernetIO.h"
-#include "libnetwork/RawSocket.h"
 #include "libnetwork/Arp.h"
+#include "libnetwork/RawSocket.h"
 #include "Worker.h"
 
 namespace core
@@ -33,19 +32,20 @@ namespace core
   private:
     int setup_multiplexer();
     void wait();
+
 #if defined(__linux__)
     struct epoll_event ev_ret_[16];
 #else
     // UNIX
     // ...
 #endif
+
+    std::shared_ptr<spdlog::logger> logger_;
+    std::shared_ptr<cfg::Config> config_;
+    std::unique_ptr<nw::RawSocket> sock_;
     std::unique_ptr<nw::Arp> arp_;
     u_int8_t buf_[2048];
-    std::shared_ptr<cfg::Config> config_;
-    std::unique_ptr<nw::EthernetIO> eth_;
     int mux_;
-    std::unique_ptr<nw::RawSocket> sock_;
-    std::shared_ptr<spdlog::logger> logger_;
   };
 } // core
 
