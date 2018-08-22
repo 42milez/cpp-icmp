@@ -39,19 +39,19 @@ namespace core
 
     static const int N_EVENTS;
 
-#if defined(__linux__)
-    EpEvt events_[16];
-#else
-    // UNIX
-    // ...
-#endif
-
     std::shared_ptr<spdlog::logger> logger_;
     std::shared_ptr<cfg::Config> config_;
     std::unique_ptr<nw::RawSocket> sock_;
     std::unique_ptr<nw::Arp> arp_;
     u_int8_t buf_[2048];
     int mux_;
+
+#if defined(__linux__)
+    EpEvt events_[16];
+#else
+    // UNIX
+    // ...
+#endif
   };
 } // core
 
