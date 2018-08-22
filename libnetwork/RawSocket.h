@@ -25,13 +25,6 @@ namespace network
   private:
     void create_socket();
 
-#if defined(__linux__)
-    struct epoll_event ev_ret_[16];
-#else
-    // UNIX
-    // ...
-#endif
-
     std::shared_ptr<spdlog::logger> logger_;
     std::string device_;
     int fd_;

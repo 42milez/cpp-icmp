@@ -23,6 +23,10 @@ namespace core
   namespace cfg = config;
   namespace nw = network;
 
+#if defined(__linux__)
+  using EpEvt = struct epoll_event;
+#endif
+
   class Listener : public Worker {
   public:
     explicit Listener(std::shared_ptr<cfg::Config> config);
@@ -30,11 +34,13 @@ namespace core
     void start() override;
     void stop() override;
   private:
-    int setup_multiplexer();
+    void setup_multiplexer();
     void wait();
 
+    static const int N_EVENTS;
+
 #if defined(__linux__)
-    struct epoll_event ev_ret_[16];
+    EpEvt events_[16];
 #else
     // UNIX
     // ...

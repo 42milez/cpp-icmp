@@ -14,8 +14,6 @@ namespace network
 {
   namespace cfg = config;
 
-  using std::string;
-
   class EthernetIO {
   public:
     EthernetIO();

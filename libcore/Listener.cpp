@@ -1,9 +1,10 @@
+#include "libutil/InternalErrorException.h"
 #include "libutil/Common.h"
 #include "Listener.h"
 
 using namespace core;
 
-const int NEVENTS = 16;
+const int Listener::N_EVENTS = 16;
 
 Listener::Listener(std::shared_ptr<cfg::Config> config) {
   logger_ = spdlog::stdout_color_mt("Listener");
@@ -28,38 +29,38 @@ void Listener::stop() {
   terminate();
 }
 
-int Listener::setup_multiplexer() {
+void Listener::setup_multiplexer() {
 #if defined(__linux__)
-  mux_ = epoll_create(NEVENTS);
+  mux_ = epoll_create(N_EVENTS);
   if (mux_ < 0) {
     logger_->error("epoll_create");
-    return -1;
+    throw util::InternalErrorException{ "Cannot create event poll." };
   }
-  struct epoll_event ev;
+
+  EpEvt ev;
   memset(&ev, 0, sizeof(ev));
   ev.events = EPOLLIN;
   ev.data.fd = sock_->fd();
   if (epoll_ctl(mux_, EPOLL_CTL_ADD, sock_->fd(), &ev) != 0) {
     logger_->error("epoll_ctl");
-    return -1;
+    throw util::InternalErrorException{ "Cannot create event poll." };
   }
 #else
   // UNIX
   // ...
 #endif
-
-  return 0;
 }
 
 void Listener::wait() {
 #if defined(__linux__)
-  int nfds = epoll_wait(mux_, ev_ret_, NEVENTS, -1);
+  int nfds = epoll_wait(mux_, events_, N_EVENTS, -1);
   if (nfds <= 0) {
     logger_->error("epoll_wait");
     return;
   }
+
   for (auto i = 0; i < nfds; i++) {
-    if (ev_ret_[i].data.fd == sock_->fd()) {
+    if (events_[i].data.fd == sock_->fd()) {
       if (auto len = read(sock_->fd(), buf_, sizeof(buf_)) <= 0) {
         this->logger_->error("read");
       } else {
