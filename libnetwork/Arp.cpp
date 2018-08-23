@@ -12,19 +12,15 @@ Arp::Arp(std::shared_ptr<cfg::Config> config) {
 }
 
 void Arp::add_table() {
-
+  // ...
 }
 
-int Arp::recv(const ether_header *eh, u_int8_t *data) {
-  struct ether_arp *arp;
-  u_int8_t *ptr = data;
-
-  arp = (struct ether_arp *) ptr;
-  ptr += sizeof(struct ether_arp);
+int Arp::recv(ether_header *eh, const u_int8_t *buf) {
+  auto arp = (EthArp *) buf;
 
   if (ntohs(arp->arp_op) == ARPOP_REQUEST) {
     logger_->info("request received");
-    struct in_addr addr;
+    cfg::InAddr addr;
     addr.s_addr = (arp->arp_tpa[3] << 24) | (arp->arp_tpa[2] << 16) | (arp->arp_tpa[1] << 8) | (arp->arp_tpa[0]);
     if (config_->is_target_ip_addr(&addr)) {
       addr.s_addr = (arp->arp_spa[3] << 24) | (arp->arp_spa[2] << 16) | (arp->arp_spa[1] << 8) | (arp->arp_spa[0]);
@@ -35,7 +31,7 @@ int Arp::recv(const ether_header *eh, u_int8_t *data) {
 
   if (ntohs(arp->arp_op) == ARPOP_REPLY) {
     logger_->info("reply received");
-    struct in_addr addr;
+    cfg::InAddr addr;
     addr.s_addr = (arp->arp_tpa[3] << 24) | (arp->arp_tpa[2] << 16) | (arp->arp_tpa[1] << 8) | (arp->arp_tpa[0]);
     if (addr.s_addr == 0 || config_->is_target_ip_addr(&addr)) {
       addr.s_addr = (arp->arp_spa[3] << 24) | (arp->arp_spa[2] << 16) | (arp->arp_spa[1] << 8) | (arp->arp_spa[0]);

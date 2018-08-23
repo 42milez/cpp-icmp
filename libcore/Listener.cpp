@@ -4,13 +4,13 @@
 
 using namespace core;
 
-const int Listener::N_EVENTS = 16;
-
 Listener::Listener(std::shared_ptr<cfg::Config> config) {
   logger_ = spdlog::stdout_color_mt("Listener");
   config_ = config;
   sock_ = std::make_unique<nw::RawSocket>(config_->device());
   arp_ = std::make_unique<nw::Arp>(config_);
+
+  memset(&buf_, 0, sizeof(buf_));
 
   setup_multiplexer();
 
@@ -53,7 +53,7 @@ void Listener::setup_multiplexer() {
 
 void Listener::wait() {
 #if defined(__linux__)
-  int nfds = epoll_wait(mux_, events_, N_EVENTS, -1);
+  int nfds = epoll_wait(mux_, events_.data(), N_EVENTS, -1);
   if (nfds <= 0) {
     logger_->error("epoll_wait");
     return;
@@ -64,18 +64,13 @@ void Listener::wait() {
       if (auto len = read(sock_->fd(), buf_, sizeof(buf_)) <= 0) {
         this->logger_->error("read");
       } else {
-        struct ether_header *eh;
-        u_int8_t *ptr = buf_;
-
-        eh = (struct ether_header *) ptr;
-        ptr += sizeof(struct ether_header);
-
+        auto eh = (nw::EthHeader *) buf_;
         if (memcmp(eh->ether_dhost, util::BCAST_MAC, 6) != 0 && memcmp(eh->ether_dhost, config_->vmac()->as_str().c_str(), 6) != 0) {
           return;
         }
 
         if (ntohs(eh->ether_type) == ETHERTYPE_ARP) {
-          arp_->recv(eh, ptr);
+          arp_->recv(eh, trim_eth_header(buf_));
         } else if (ntohs(eh->ether_type) == ETHERTYPE_IP) {
           // icmp
           // ...
@@ -87,4 +82,8 @@ void Listener::wait() {
   // UNIX
   // ...
 #endif
+}
+
+u_int8_t* Listener::trim_eth_header(u_int8_t *data) {
+  return data + sizeof(nw::EthHeader);
 }

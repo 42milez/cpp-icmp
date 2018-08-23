@@ -27,7 +27,8 @@ namespace network
   class Arp {
   public:
     Arp(std::shared_ptr<cfg::Config> config);
-    int recv(const ether_header *eh, u_int8_t *data);
+    // https://stackoverflow.com/questions/17156282/passing-a-stdarray-of-unknown-size-to-a-function
+    int recv(EthHeader *eh, const u_int8_t *buf);
   private:
     void add_table();
     void send(int fd, const EthHeader *eh, const EthArp *ea, const std::vector<u_int8_t>& vmac);
