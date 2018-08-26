@@ -14,9 +14,9 @@ namespace network
 {
   namespace cfg = config;
 
-  class EthernetIO {
+  class EthSender {
   public:
-    EthernetIO();
+    EthSender();
   private:
     std::shared_ptr<spdlog::logger> logger_;
   };
