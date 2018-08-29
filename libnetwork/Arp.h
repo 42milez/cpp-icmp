@@ -10,6 +10,7 @@
 #include <spdlog/spdlog.h>
 
 #include "libconfig/Config.h"
+#include "EthSender.h"
 
 namespace network
 {
@@ -37,6 +38,7 @@ namespace network
     std::shared_ptr<spdlog::logger> logger_;
     std::shared_ptr<cfg::Config> config_;
     ArpEntry arp_entries_;
+    std::unique_ptr<EthSender> sender_;
   };
 } // network
 
