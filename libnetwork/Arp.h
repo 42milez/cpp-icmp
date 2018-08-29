@@ -28,10 +28,12 @@ namespace network
   public:
     Arp(std::shared_ptr<cfg::Config> config);
     // https://stackoverflow.com/questions/17156282/passing-a-stdarray-of-unknown-size-to-a-function
-    int recv(EthHeader *eh, const u_int8_t *buf);
+    void recv(EthHeader *eh, const u_int8_t *buf);
+    void gratuitous();
+    void request(const IP& ip);
   private:
     void add_table();
-    void send(int fd, const EthHeader *eh, const EthArp *ea, const std::vector<u_int8_t>& vmac);
+    void reply(u_int8_t dmac, u_int8_t daddr);
     std::shared_ptr<spdlog::logger> logger_;
     std::shared_ptr<cfg::Config> config_;
     ArpEntry arp_entries_;

@@ -10,7 +10,7 @@ namespace util
   class InternalErrorException : public std::exception {
   public:
     explicit InternalErrorException(std::string msg);
-    const char* what() const noexcept override;
+    const char * what() const noexcept override;
   private:
     std::string msg_;
   };
