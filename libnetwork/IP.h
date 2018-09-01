@@ -9,10 +9,12 @@
 
 namespace network
 {
+  using bytes = std::vector<std::byte>;
+
   class IP {
   public:
     IP(const std::string& addr);
-    const u_int8_t * as_byte() const;
+    const bytes & as_byte() const;
     u_int32_t as_numeric();
   private:
     union {

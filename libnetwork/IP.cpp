@@ -6,7 +6,7 @@ IP::IP(const std::string& addr) {
   addr_.l = inet_addr(addr.c_str());
 };
 
-const u_int8_t * IP::as_byte() const {
+const bytes & IP::as_byte() const {
   return addr_.c;
 }
 

@@ -1,14 +1,15 @@
-#include "libutil/Common.hpp"
 #include "EthSender.h"
 
 using namespace network;
 
-EthSender::EthSender() {
+EthSender::EthSender(const std::shared_ptr<cfg::Config> &config) {
+  config_ = config;
   logger_ = spdlog::stdout_color_mt("EthSender");
-  sock_ = std::make_unique<nw::RawSocket>(config_->device());
+  sock_ = std::make_unique<RawSocket>(config_->device());
 }
 
-void EthSender::send(void send(const u_int16_t type, std::unique_ptr<MAC> &smac, std::unique_ptr<MAC> &dmac, const Payload &pl))
+template <typename T>
+void EthSender::send(u_int16_t type, const bytes &dmac, const std::unique_ptr<Payload<T>> &pl)
 {
   // ...
 }

@@ -2,14 +2,16 @@
 #define ICMP_COMMON_H
 
 
+#include <cstddef>
+#include <vector>
+
 #include <netinet/if_ether.h>
 
 namespace util
 {
-  const u_int8_t ALL_ZERO_MAC[6] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
-  const u_int8_t BCAST_MAC[6] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
-
-  const u_int8_t PHANTOM_IP_ADDRESS[4] = { 0, 0, 0, 0 };
+  const std::vector<std::byte> ALL_ZERO_MAC = { std::byte(0x00), std::byte(0x00), std::byte(0x00), std::byte(0x00), std::byte(0x00), std::byte(0x00) };
+  const std::vector<std::byte> BCAST_MAC { std::byte(0xFF), std::byte(0xFF), std::byte(0xFF), std::byte(0xFF), std::byte(0xFF), std::byte(0xFF) };
+  const std::vector<std::byte> PHANTOM_IP_ADDRESS = { std::byte(0), std::byte(0), std::byte(0), std::byte(0) };
 } // util
 
 
