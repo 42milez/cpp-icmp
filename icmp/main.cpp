@@ -90,7 +90,7 @@ int main(int argc, char** argv) {
     }
   }
 
-  // ToDo: Use sigaction(2)
+  // todo: Use sigaction(2)
   signal(SIGABRT, &ExitHandler::exitHandler);
   signal(SIGTERM, &ExitHandler::exitHandler);
   signal(SIGINT, &ExitHandler::exitHandler);

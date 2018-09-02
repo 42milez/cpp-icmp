@@ -30,7 +30,7 @@ void EthSender::send(u_int16_t type, const bytes &dmac, const std::unique_ptr<Pa
   memcpy(buf_ptr, pl->data.get(), pl->len);
   buf_ptr += pl->len;
 
-  // @todo: Use ETH_ZLEN
+  // todo: Use ETH_ZLEN
   if ((buf_ptr - buf) < 60) {
     auto padlen = 60 - (buf_ptr - buf);
     memset(buf_ptr, 0, padlen);
