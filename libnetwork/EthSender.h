@@ -21,7 +21,7 @@ namespace network
   template <typename T>
   struct Payload {
     std::unique_ptr<T> data;
-    int len;
+    size_t len;
   };
 
   class EthSender {
