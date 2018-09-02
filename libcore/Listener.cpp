@@ -7,7 +7,7 @@ using namespace core;
 Listener::Listener(std::shared_ptr<cfg::Config> &config) {
   logger_ = spdlog::stdout_color_mt("Listener");
   config_ = config;
-  sock_ = std::make_unique<nw::RawSocket>(config_->device());
+  sock_ = std::make_unique<nw::RawSocket>(config_->device(), "RawSocket(Listener)");
   arp_ = std::make_unique<nw::Arp>(config_);
 
   memset(&buf_, 0, sizeof(buf_));

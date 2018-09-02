@@ -26,8 +26,8 @@
 
 using namespace network;
 
-RawSocket::RawSocket(const std::string& device) {
-  logger_ = spdlog::stdout_color_mt("RawSocket");
+RawSocket::RawSocket(const std::string& device, const std::string &logger_name) {
+  logger_ = spdlog::stdout_color_mt(logger_name);
   device_ = device;
 
   create_socket();

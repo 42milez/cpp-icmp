@@ -19,7 +19,7 @@ namespace network
 {
   class RawSocket {
   public:
-    RawSocket(const std::string& device);
+    RawSocket(const std::string& device, const std::string &logger_name);
     ~RawSocket();
     int fd();
   private:
