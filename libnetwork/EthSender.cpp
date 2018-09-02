@@ -15,5 +15,6 @@ void EthSender::send(u_int16_t type, const bytes &dmac, const std::unique_ptr<Pa
 }
 
 // https://bytefreaks.net/programming-2/c/c-undefined-reference-to-templated-class-function
+// http://www.cplusplus.com/articles/1C75fSEw/
 // https://qiita.com/i153/items/38f9688a9c80b2cb7da7
 template void EthSender::send<EthArp>(u_int16_t type, const bytes &dmac, const std::unique_ptr<Payload<EthArp>> &pl);
