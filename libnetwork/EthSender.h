@@ -27,12 +27,8 @@ namespace network
   class EthSender {
   public:
     EthSender(const std::shared_ptr<cfg::Config> &config);
-    // To avoid "undefined reference error", put the implementation in this header file.
-    // https://bytefreaks.net/programming-2/c/c-undefined-reference-to-templated-class-function
     template <typename T>
-    void send(u_int16_t type, const bytes &dmac, const std::unique_ptr<Payload<T>> &pl) {
-      // ...
-    }
+    void send(u_int16_t type, const bytes &dmac, const std::unique_ptr<Payload<T>> &pl);
   private:
     std::shared_ptr<cfg::Config> config_;
     std::shared_ptr<spdlog::logger> logger_;
