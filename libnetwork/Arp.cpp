@@ -10,9 +10,9 @@ namespace cfg = config;
 
 const int N_ARP_TABLES = 16;
 
-std::unique_ptr<Payload<EthArp>> build_payload(const u_char *sha, const bytes &spa, const bytes &tha, const u_char *tpa);
+std::unique_ptr<Payload<EthArp>> build_payload(const u_char *sha, const bytes &spa, const bytes &tha, const bytes &tpa);
 
-Arp::Arp(std::shared_ptr<cfg::Config> config) {
+Arp::Arp(std::shared_ptr<cfg::Config> &config) {
   logger_ = spdlog::stdout_color_mt("Arp");
   config_ = config;
   sender_ = std::make_unique<EthSender>(config_);
@@ -62,15 +62,15 @@ void Arp::gratuitous() {
 //  - 宛先MACには0を指定
 //  - 宛先IPには通信相手のIPアドレス指定
 void Arp::request(const IP& tpa) {
-  auto payload = build_payload(config_->vmac()->as_hex().data(), config_->vip()->as_byte(), util::ALL_ZERO_MAC, tpa.as_byte());
+  std::unique_ptr<Payload<EthArp>> payload = build_payload(config_->vmac()->as_hex().data(), config_->vip()->as_byte(), util::ALL_ZERO_MAC, tpa.as_byte());
   sender_->send(ETHERTYPE_ARP, util::BCAST_MAC, payload);
 }
 
 void Arp::reply(u_int8_t dmac, u_int8_t daddr) {
-
+  // ...
 }
 
-std::unique_ptr<Payload<EthArp>> build_payload(const u_char *sha, const bytes &spa, const bytes &tha, const u_char *tpa) {
+std::unique_ptr<Payload<EthArp>> build_payload(const u_char *sha, const bytes &spa, const bytes &tha, const bytes &tpa) {
   std::unique_ptr<Payload<EthArp>> payload = std::make_unique<Payload<EthArp>>();
   std::unique_ptr<EthArp> arp = std::make_unique<EthArp>();
 
@@ -84,7 +84,7 @@ std::unique_ptr<Payload<EthArp>> build_payload(const u_char *sha, const bytes &s
   std::memcpy(arp->arp_spa, spa.data(), 6);
 
   std::memcpy(arp->arp_tha, tha.data(), 4);
-  std::memcpy(arp->arp_tpa, tpa, 4);
+  std::memcpy(arp->arp_tpa, tpa.data(), 4);
 
   payload->data = std::move(arp);
 

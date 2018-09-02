@@ -2,10 +2,10 @@
 #define ICMP_IP_H
 
 
-#include <arpa/inet.h>
-#include <netinet/in.h>
+#include <cstddef>
 
 #include <string>
+#include <vector>
 
 namespace network
 {
@@ -15,12 +15,9 @@ namespace network
   public:
     IP(const std::string& addr);
     const bytes & as_byte() const;
-    u_int32_t as_numeric();
+    int as_decimal();
   private:
-    union {
-      u_int32_t l;
-      u_int8_t c[4];
-    } addr_;
+    bytes addr_;
   };
 } // network
 

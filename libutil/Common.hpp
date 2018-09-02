@@ -9,9 +9,11 @@
 
 namespace util
 {
-  const std::vector<std::byte> ALL_ZERO_MAC = { std::byte(0x00), std::byte(0x00), std::byte(0x00), std::byte(0x00), std::byte(0x00), std::byte(0x00) };
-  const std::vector<std::byte> BCAST_MAC { std::byte(0xFF), std::byte(0xFF), std::byte(0xFF), std::byte(0xFF), std::byte(0xFF), std::byte(0xFF) };
-  const std::vector<std::byte> PHANTOM_IP_ADDRESS = { std::byte(0), std::byte(0), std::byte(0), std::byte(0) };
+  using bytes = std::vector<std::byte>;
+
+  const bytes ALL_ZERO_MAC = { std::byte(0x00), std::byte(0x00), std::byte(0x00), std::byte(0x00), std::byte(0x00), std::byte(0x00) };
+  const bytes BCAST_MAC { std::byte(0xFF), std::byte(0xFF), std::byte(0xFF), std::byte(0xFF), std::byte(0xFF), std::byte(0xFF) };
+  const bytes PHANTOM_IP_ADDRESS = { std::byte(0), std::byte(0), std::byte(0), std::byte(0) };
 } // util
 
 

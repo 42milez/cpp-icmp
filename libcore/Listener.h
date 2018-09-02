@@ -30,7 +30,7 @@ namespace core
 
   class Listener : public Worker {
   public:
-    explicit Listener(std::shared_ptr<cfg::Config> config);
+    explicit Listener(std::shared_ptr<cfg::Config> &config);
     ~Listener() override;
     void start() override;
     void stop() override;

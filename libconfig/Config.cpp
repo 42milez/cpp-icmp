@@ -37,14 +37,14 @@ const std::unique_ptr<nw::MAC> & Config::vmac() {
 }
 
 int Config::is_target_ip_addr(const struct in_addr *addr) {
-  if (param_->vip->as_numeric() == addr->s_addr) {
+  if (param_->vip->as_decimal() == addr->s_addr) {
     return 1;
   }
   return 0;
 }
 
 int Config::is_same_subnet(const struct in_addr *addr) {
-  if ((addr->s_addr & param_->vmask->as_numeric()) == (param_->vip->as_numeric() & param_->vmask->as_numeric())) {
+  if ((addr->s_addr & param_->vmask->as_decimal()) == (param_->vip->as_decimal() & param_->vmask->as_decimal())) {
     return 1;
   }
   else {

@@ -27,7 +27,7 @@ namespace network
 
   class Arp {
   public:
-    Arp(std::shared_ptr<cfg::Config> config);
+    Arp(std::shared_ptr<cfg::Config> &config);
     // https://stackoverflow.com/questions/17156282/passing-a-stdarray-of-unknown-size-to-a-function
     void recv(EthHeader *eh, const u_int8_t *buf);
     void gratuitous();

@@ -4,7 +4,7 @@
 
 using namespace core;
 
-Listener::Listener(std::shared_ptr<cfg::Config> config) {
+Listener::Listener(std::shared_ptr<cfg::Config> &config) {
   logger_ = spdlog::stdout_color_mt("Listener");
   config_ = config;
   sock_ = std::make_unique<nw::RawSocket>(config_->device());
