@@ -10,7 +10,7 @@ namespace cfg = config;
 
 const int N_ARP_TABLES = 16;
 
-std::unique_ptr<Payload<EthArp>> build_payload(const u_char *sha, const bytes &spa, const bytes &tha, const bytes &tpa);
+std::unique_ptr<Payload<EthArp>> build_payload(u_int16_t op, const u_char *sha, const bytes &spa, const bytes &tha, const bytes &tpa);
 
 Arp::Arp(std::shared_ptr<cfg::Config> &config) {
   logger_ = spdlog::stdout_color_mt("Arp");
@@ -54,7 +54,7 @@ void Arp::recv(ether_header *eh, const u_int8_t *buf) {
 //    - 宛先IPアドレスがホストのIPアドレスと一致する
 //    - 宛先MACアドレスが0ではない
 void Arp::gratuitous() {
-  auto payload = build_payload(config_->vmac()->as_hex().data(), util::PHANTOM_IP_ADDRESS, util::ALL_ZERO_MAC, config_->vip()->as_byte());
+  auto payload = build_payload(ARPOP_REQUEST, config_->vmac()->as_hex().data(), util::PHANTOM_IP_ADDRESS, util::ALL_ZERO_MAC, config_->vip()->as_byte());
 }
 
 //  IPアドレスからMACアドレスを引く
@@ -62,7 +62,7 @@ void Arp::gratuitous() {
 //  - 宛先MACには0を指定
 //  - 宛先IPには通信相手のIPアドレス指定
 void Arp::request(const IP& tpa) {
-  std::unique_ptr<Payload<EthArp>> payload = build_payload(config_->vmac()->as_hex().data(), config_->vip()->as_byte(), util::ALL_ZERO_MAC, tpa.as_byte());
+  std::unique_ptr<Payload<EthArp>> payload = build_payload(ARPOP_REQUEST, config_->vmac()->as_hex().data(), config_->vip()->as_byte(), util::ALL_ZERO_MAC, tpa.as_byte());
   sender_->send(ETHERTYPE_ARP, util::BCAST_MAC, payload);
 }
 
@@ -70,7 +70,7 @@ void Arp::reply(u_int8_t dmac, u_int8_t daddr) {
   // ...
 }
 
-std::unique_ptr<Payload<EthArp>> build_payload(const u_char *sha, const bytes &spa, const bytes &tha, const bytes &tpa) {
+std::unique_ptr<Payload<EthArp>> build_payload(u_int16_t op, const u_char *sha, const bytes &spa, const bytes &tha, const bytes &tpa) {
   std::unique_ptr<Payload<EthArp>> payload = std::make_unique<Payload<EthArp>>();
   std::unique_ptr<EthArp> arp = std::make_unique<EthArp>();
 
@@ -78,7 +78,7 @@ std::unique_ptr<Payload<EthArp>> build_payload(const u_char *sha, const bytes &s
   arp->arp_pro = htons(ETHERTYPE_IP);
   arp->arp_hln = 6;
   arp->arp_pln = 4;
-  arp->arp_op = htons(ARPOP_REQUEST);
+  arp->arp_op = htons(op);
 
   std::memcpy(arp->arp_sha, sha, 6);
   std::memcpy(arp->arp_spa, spa.data(), 6);
