@@ -49,8 +49,9 @@ void Arp::recv(const bytes &buf) {
 //  - 受信側は以下を条件に返答する
 //    - 宛先IPアドレスがホストのIPアドレスと一致する
 //    - 宛先MACアドレスが0ではない
-void Arp::gratuitous(const bytes &buf) {
-  auto payload = build_payload(ARPOP_REQUEST, buf);
+void Arp::gratuitous_request(const bytes &buf) {
+  auto payload = build_gratuitous_request(buf);
+  sender_->send(ETHERTYPE_ARP, util::BCAST_MAC, payload);
 }
 
 //  IPアドレスからMACアドレスを引く
@@ -58,16 +59,16 @@ void Arp::gratuitous(const bytes &buf) {
 //  - 宛先MACには0を指定
 //  - 宛先IPには通信相手のIPアドレス指定
 void Arp::request(const bytes &buf) {
-  std::unique_ptr<Payload<EthArp>> payload = build_payload(ARPOP_REQUEST, buf);
+  std::unique_ptr<Payload<EthArp>> payload = build_request(buf);
   sender_->send(ETHERTYPE_ARP, util::BCAST_MAC, payload);
 }
 
 void Arp::reply(const bytes &buf) {
-  std::unique_ptr<Payload<EthArp>> payload = build_payload(ARPOP_REPLY, buf);
+  std::unique_ptr<Payload<EthArp>> payload = build_reply(buf);
   sender_->send(ETHERTYPE_ARP, util::BCAST_MAC, payload);
 }
 
-std::unique_ptr<Payload<EthArp>> Arp::build_payload(u_int16_t op, const bytes &buf) {
+std::unique_ptr<Payload<EthArp>> Arp::build_gratuitous_request(const bytes &buf) {
   std::unique_ptr<Payload<EthArp>> payload = std::make_unique<Payload<EthArp>>();
   std::unique_ptr<EthArp> arp = std::make_unique<EthArp>();
 
@@ -75,7 +76,49 @@ std::unique_ptr<Payload<EthArp>> Arp::build_payload(u_int16_t op, const bytes &b
   arp->arp_pro = htons(ETHERTYPE_IP);
   arp->arp_hln = 6;
   arp->arp_pln = 4;
-  arp->arp_op = htons(op);
+  arp->arp_op = htons(ARPOP_REQUEST);
+
+  std::memcpy(arp->arp_sha, config_->vmac()->as_hex().data(), 6);
+  std::memcpy(arp->arp_spa, util::PHANTOM_IP_ADDRESS.data(), 4);
+
+  std::memcpy(arp->arp_tha, util::ALL_ZERO_MAC.data(), 6);
+  std::memcpy(arp->arp_tpa, arp->arp_tpa, 4);
+
+  payload->data = std::move(arp);
+
+  return payload;
+}
+
+std::unique_ptr<Payload<EthArp>> Arp::build_request(const bytes &buf) {
+  std::unique_ptr<Payload<EthArp>> payload = std::make_unique<Payload<EthArp>>();
+  std::unique_ptr<EthArp> arp = std::make_unique<EthArp>();
+
+  arp->arp_hrd = htons(ARPHRD_ETHER);
+  arp->arp_pro = htons(ETHERTYPE_IP);
+  arp->arp_hln = 6;
+  arp->arp_pln = 4;
+  arp->arp_op = htons(ARPOP_REQUEST);
+
+  std::memcpy(arp->arp_sha, config_->vmac()->as_hex().data(), 6);
+  std::memcpy(arp->arp_spa, config_->vip()->as_byte().data(), 4);
+
+  std::memcpy(arp->arp_tha, util::ALL_ZERO_MAC.data(), 6);
+  std::memcpy(arp->arp_tpa, arp->arp_tpa, 4);
+
+  payload->data = std::move(arp);
+
+  return payload;
+}
+
+std::unique_ptr<Payload<EthArp>> Arp::build_reply(const bytes &buf) {
+  std::unique_ptr<Payload<EthArp>> payload = std::make_unique<Payload<EthArp>>();
+  std::unique_ptr<EthArp> arp = std::make_unique<EthArp>();
+
+  arp->arp_hrd = htons(ARPHRD_ETHER);
+  arp->arp_pro = htons(ETHERTYPE_IP);
+  arp->arp_hln = 6;
+  arp->arp_pln = 4;
+  arp->arp_op = htons(ARPOP_REPLY);
 
   std::memcpy(arp->arp_sha, config_->vmac()->as_hex().data(), 6);
   std::memcpy(arp->arp_spa, config_->vip()->as_byte().data(), 4);

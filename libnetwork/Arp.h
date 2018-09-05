@@ -29,11 +29,13 @@ namespace network
     Arp(const std::shared_ptr<config::Config> &config);
     // https://stackoverflow.com/questions/17156282/passing-a-stdarray-of-unknown-size-to-a-function
     void recv(const bytes &buf);
-    void gratuitous(const bytes &buf);
+    void gratuitous_request(const bytes &buf);
     void request(const bytes &buf);
   private:
     void add_table();
-    std::unique_ptr<Payload<EthArp>> build_payload(u_int16_t op, const bytes &buf);
+    std::unique_ptr<Payload<EthArp>> build_gratuitous_request(const bytes &buf);
+    std::unique_ptr<Payload<EthArp>> build_request(const bytes &buf);
+    std::unique_ptr<Payload<EthArp>> build_reply(const bytes &buf);
     void reply(const bytes &buf);
     std::shared_ptr<spdlog::logger> logger_;
     std::shared_ptr<config::Config> config_;
