@@ -36,8 +36,8 @@ const std::unique_ptr<nw::MAC> & Config::vmac() {
   return param_->vmac;
 }
 
-int Config::is_target_ip_addr(const struct in_addr *addr) {
-  if (param_->vip->as_decimal() == addr->s_addr) {
+int Config::is_target_ip_addr(u_int32_t addr) {
+  if (param_->vip->as_decimal() == addr) {
     return 1;
   }
   return 0;

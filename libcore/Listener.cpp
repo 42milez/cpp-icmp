@@ -1,16 +1,16 @@
 #include "libutil/InternalErrorException.h"
-#include "libutil/Common.hpp"
+#include "libutil/Common.h"
 #include "Listener.h"
 
 using namespace core;
+
+using bytes = std::vector<std::byte>;
 
 Listener::Listener(std::shared_ptr<cfg::Config> &config) {
   logger_ = spdlog::stdout_color_mt("Listener");
   config_ = config;
   sock_ = std::make_unique<nw::RawSocket>(config_->device(), "RawSocket(Listener)");
   arp_ = std::make_unique<nw::Arp>(config_);
-
-  memset(&buf_, 0, sizeof(buf_));
 
   setup_multiplexer();
 
@@ -61,16 +61,17 @@ void Listener::wait() {
 
   for (auto i = 0; i < nfds; i++) {
     if (events_[i].data.fd == sock_->fd()) {
-      if (auto len = read(sock_->fd(), buf_, sizeof(buf_)) <= 0) {
+      bytes buf = bytes(SIZE_BUFFER);
+      if (auto len = read(sock_->fd(), buf.data(), SIZE_BUFFER) <= 0) {
         this->logger_->error("read");
       } else {
-        auto eh = (nw::EthHeader *) buf_;
+        auto eh = (nw::EthHeader *) buf.data();
         if (memcmp(eh->ether_dhost, util::BCAST_MAC.data(), 6) != 0 && memcmp(eh->ether_dhost, config_->vmac()->as_str().c_str(), 6) != 0) {
           return;
         }
 
         if (ntohs(eh->ether_type) == ETHERTYPE_ARP) {
-          arp_->recv(eh, trim_eth_header(buf_));
+          arp_->recv(buf);
         } else if (ntohs(eh->ether_type) == ETHERTYPE_IP) {
           // icmp
           // ...
@@ -82,8 +83,4 @@ void Listener::wait() {
   // UNIX
   // ...
 #endif
-}
-
-u_int8_t* Listener::trim_eth_header(u_int8_t *data) {
-  return data + sizeof(nw::EthHeader);
 }

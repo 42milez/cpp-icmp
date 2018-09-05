@@ -42,11 +42,9 @@ namespace core
     std::shared_ptr<cfg::Config> config_;
     std::unique_ptr<nw::RawSocket> sock_;
     std::unique_ptr<nw::Arp> arp_;
-    u_int8_t buf_[SIZE_BUFFER];
     int mux_;
 
     void setup_multiplexer();
-    u_int8_t* trim_eth_header(u_int8_t *data);
     void wait();
 #if defined(__linux__)
     std::array<EpEvt,N_EVENTS> events_;
