@@ -11,6 +11,7 @@
 #include "libutil/InternalErrorException.h"
 #include "icmp/buildinfo.h"
 #include "libconfig/Config.h"
+#include "libcore/Command.h"
 #include "libcore/Listener.h"
 
 namespace cfg = config;
@@ -98,6 +99,8 @@ int main(int argc, char** argv) {
 
   ExitHandler exitHandler;
 
+  std::unique_ptr<core::Command> command = std::make_unique<core::Command>();
+
   std::unique_ptr<core::Listener> listener;
 
   try {
@@ -107,6 +110,7 @@ int main(int argc, char** argv) {
     return -1;
   }
 
+  command->start();
   listener->start();
 
   while (!exitHandler.shouldExit()) {
