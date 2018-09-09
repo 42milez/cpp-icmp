@@ -1,15 +1,15 @@
 #include "libutil/InternalErrorException.h"
 #include "libutil/Common.h"
-#include "Listener.h"
+#include "EthListener.h"
 
 using namespace core;
 
 using bytes = std::vector<std::byte>;
 
-Listener::Listener(std::shared_ptr<cfg::Config> &config) {
-  logger_ = spdlog::stdout_color_mt("Listener");
+EthListener::EthListener(std::shared_ptr<cfg::Config> &config) {
+  logger_ = spdlog::stdout_color_mt("EthListener");
   config_ = config;
-  sock_ = std::make_unique<nw::RawSocket>(config_->device(), "RawSocket(Listener)");
+  sock_ = std::make_unique<nw::RawSocket>(config_->device(), "RawSocket(EthListener)");
   arp_ = std::make_unique<nw::Arp>(config_);
 
   setup_multiplexer();
@@ -17,19 +17,19 @@ Listener::Listener(std::shared_ptr<cfg::Config> &config) {
   assign([this]{ this->wait(); });
 }
 
-Listener::~Listener() {
+EthListener::~EthListener() {
   stop();
 }
 
-void Listener::start() {
+void EthListener::start() {
   run();
 }
 
-void Listener::stop() {
+void EthListener::stop() {
   terminate();
 }
 
-void Listener::setup_multiplexer() {
+void EthListener::setup_multiplexer() {
 #if defined(__linux__)
   mux_ = epoll_create(N_EVENTS);
   if (mux_ < 0) {
@@ -51,7 +51,7 @@ void Listener::setup_multiplexer() {
 #endif
 }
 
-void Listener::wait() {
+void EthListener::wait() {
 #if defined(__linux__)
   int nfds = epoll_wait(mux_, events_.data(), N_EVENTS, -1);
   if (nfds <= 0) {

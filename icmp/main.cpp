@@ -11,8 +11,8 @@
 #include "libutil/InternalErrorException.h"
 #include "icmp/buildinfo.h"
 #include "libconfig/Config.h"
-#include "libcore/Command.h"
-#include "libcore/Listener.h"
+#include "libcore/CmdListener.h"
+#include "libcore/EthListener.h"
 
 namespace cfg = config;
 namespace po = boost::program_options;
@@ -99,12 +99,12 @@ int main(int argc, char** argv) {
 
   ExitHandler exitHandler;
 
-  std::unique_ptr<core::Command> command = std::make_unique<core::Command>();
+  std::unique_ptr<core::CmdListener> command = std::make_unique<core::CmdListener>();
 
-  std::unique_ptr<core::Listener> listener;
+  std::unique_ptr<core::EthListener> listener;
 
   try {
-    listener = std::make_unique<core::Listener>(config);
+    listener = std::make_unique<core::EthListener>(config);
   } catch (util::InternalErrorException const& e) {
     logger->critical(e.what());
     return -1;

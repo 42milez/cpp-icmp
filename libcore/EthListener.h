@@ -1,5 +1,5 @@
-#ifndef ICMP_LISTENER_H
-#define ICMP_LISTENER_H
+#ifndef ICMP_ETHLISTENER_H
+#define ICMP_ETHLISTENER_H
 
 
 #include <array>
@@ -28,10 +28,10 @@ namespace core
   using EpEvt = struct epoll_event;
 #endif
 
-  class Listener : public Worker {
+  class EthListener : public Worker {
   public:
-    explicit Listener(std::shared_ptr<cfg::Config> &config);
-    ~Listener() override;
+    explicit EthListener(std::shared_ptr<cfg::Config> &config);
+    ~EthListener() override;
     void start() override;
     void stop() override;
   private:
@@ -56,4 +56,4 @@ namespace core
 } // core
 
 
-#endif // ICMP_LISTENER_H
+#endif // ICMP_ETHLISTENER_H

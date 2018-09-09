@@ -8,32 +8,35 @@
   // ...
 #endif
 
+#include <boost/algorithm/string/classification.hpp>
+#include <boost/algorithm/string/split.hpp>
+
 #include "libutil/InternalErrorException.h"
-#include "Command.h"
+#include "CmdListener.h"
 
 using namespace core;
 
 using bytes = std::vector<std::byte>;
 
-Command::Command() {
-  logger_ = spdlog::stdout_color_mt("Command");
+CmdListener::CmdListener() {
+  logger_ = spdlog::stdout_color_mt("CmdListener");
   setup_multiplexer();
   assign([this]{ this->wait(); });
 }
 
-Command::~Command() {
+CmdListener::~CmdListener() {
   stop();
 }
 
-void Command::start() {
+void CmdListener::start() {
   run();
 }
 
-void Command::stop() {
+void CmdListener::stop() {
   terminate();
 }
 
-void Command::setup_multiplexer() {
+void CmdListener::setup_multiplexer() {
 #if defined(__linux__)
   mux_ = epoll_create(N_EVENTS);
   if (mux_ < 0) {
@@ -54,7 +57,7 @@ void Command::setup_multiplexer() {
 #endif
 }
 
-void Command::wait() {
+void CmdListener::wait() {
 #if defined(__linux__)
   int nfds = epoll_wait(mux_, events_.data(), N_EVENTS, -1);
   if (nfds <= 0) {
@@ -64,9 +67,11 @@ void Command::wait() {
 
   for (auto i = 0; i < nfds; i++) {
     if (events_[i].data.fd == fileno(stdin)) {
-      bytes buf = bytes(SIZE_BUFFER);
-      fgets(reinterpret_cast<char *>(buf.data()), sizeof(buf.data()), stdin);
-      exec(buf);
+      std::string cmd;
+//      bytes buf = bytes(SIZE_BUFFER);
+//      fgets(reinterpret_cast<char *>(buf.data()), sizeof(buf.data()), stdin);
+      std::cin >> cmd;
+      parse(cmd);
     }
   }
 #else
@@ -75,6 +80,27 @@ void Command::wait() {
 #endif
 }
 
-void Command::exec(const bytes &buf) {
-  // ...
+void CmdListener::parse(const std::string &cmd) {
+  std::vector<std::string> splitted;
+  boost::algorithm::split(splitted, cmd, boost::is_any_of(" "));
+
+  if (splitted[0] == "arp") {
+
+  } else if (splitted[0] == "ping") {
+
+  } else if (splitted[0] == "exit") {
+    // ...
+  } else {
+    logger_->error("Invalid command.");
+  }
+}
+
+void CmdListener::exec_arp(const std::string &option) {
+  if (option == "-a") {
+
+  }
+
+  if (option == "-d") {
+
+  }
 }

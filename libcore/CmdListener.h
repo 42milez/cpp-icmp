@@ -1,5 +1,5 @@
-#ifndef ICMP_COMMAND_H
-#define ICMP_COMMAND_H
+#ifndef ICMP_CMDLISTENER_H
+#define ICMP_CMDLISTENER_H
 
 
 #include <cstddef>
@@ -17,19 +17,20 @@ namespace core
   using EpEvt = struct epoll_event;
 #endif
 
-  class Command : public Worker {
+  class CmdListener : public Worker {
   public:
-    Command();
-    ~Command();
+    CmdListener();
+    ~CmdListener();
     void start() override;
     void stop() override;
   private:
     static const size_t N_EVENTS = 16;
     static const size_t SIZE_BUFFER = 2048;
 
-    void exec(const bytes &buf);
     void setup_multiplexer();
     void wait();
+    void parse(const std::string &cmd);
+    void exec_arp(const std::string &option);
 
     std::shared_ptr<spdlog::logger> logger_;
     int mux_;
@@ -41,4 +42,4 @@ namespace core
 }
 
 
-#endif // ICMP_COMMAND_H
+#endif // ICMP_CMDLISTENER_H
