@@ -97,7 +97,7 @@ int main(int argc, char** argv) {
   signal(SIGINT, &ExitHandler::exitHandler);
   signal(SIGPIPE, SIG_IGN);
 
-  ExitHandler exitHandler;
+  ExitHandler eh;
 
   std::unique_ptr<core::CmdListener> command = std::make_unique<core::CmdListener>();
 
@@ -113,10 +113,11 @@ int main(int argc, char** argv) {
   command->start();
   listener->start();
 
-  while (!exitHandler.shouldExit()) {
+  while (!eh.shouldExit()) {
     std::this_thread::sleep_for(std::chrono::milliseconds(1000));
   }
 
+  command->stop();
   listener->stop();
 
   return 0;

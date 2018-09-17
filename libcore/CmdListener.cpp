@@ -1,5 +1,6 @@
 #include <cstdio>
 #include <iostream>
+#include <csignal>
 
 #if defined(__linux__)
 #include <sys/epoll.h>
@@ -85,9 +86,9 @@ void CmdListener::parse(const std::string &cmd) {
   boost::algorithm::split(splitted, cmd, boost::is_any_of(" "));
 
   if (splitted[0] == "arp") {
-
+    // ...
   } else if (splitted[0] == "ping") {
-
+    // ...
   } else if (splitted[0] == "exit") {
     // ...
   } else {
