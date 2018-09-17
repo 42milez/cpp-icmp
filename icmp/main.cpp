@@ -27,13 +27,28 @@ namespace
 
   class ExitHandler {
   public:
-    static void exitHandler(int) { s_shouldExit = true; }
+    static void exit() { s_shouldExit = true; }
     bool shouldExit() const { return s_shouldExit; }
   private:
     static bool s_shouldExit;
   };
 
   bool ExitHandler::s_shouldExit = false;
+
+  template <typename Func>
+  void register_handler(int signum, Func handler) {
+    struct sigaction act { nullptr };
+    sigset_t set;
+
+    act.sa_handler = handler;
+    act.sa_flags = 0;
+
+    sigemptyset(&set);
+    sigaddset(&set, signum);
+
+    act.sa_mask = set;
+    sigaction(signum, nullptr, &act);
+  }
 } // namespace
 
 int main(int argc, char** argv) {
@@ -91,16 +106,21 @@ int main(int argc, char** argv) {
     }
   }
 
-  // todo: Use sigaction(2)
-  signal(SIGABRT, &ExitHandler::exitHandler);
-  signal(SIGTERM, &ExitHandler::exitHandler);
-  signal(SIGINT, &ExitHandler::exitHandler);
-  signal(SIGPIPE, SIG_IGN);
+  // Signal Handling
+  // - http://doi-t.hatenablog.com/entry/2014/02/15/020909
+  // - http://www.gnu.org/software/libc/manual/html_node/Sigaction-Function-Example.html
+  // - http://kzth.sakura.ne.jp/memo/?p=77
 
-  ExitHandler eh;
+  // Handle Exit Signal
+  auto sig_hander = [](int signum) { ExitHandler::exit(); };
+  register_handler(SIGABRT, sig_hander);
+  register_handler(SIGINT, sig_hander);
+  register_handler(SIGTERM, sig_hander);
+
+  // Handle Pipe Signal
+  register_handler(SIGPIPE, SIG_IGN);
 
   std::unique_ptr<core::CmdListener> command = std::make_unique<core::CmdListener>();
-
   std::unique_ptr<core::EthListener> listener;
 
   try {
@@ -112,6 +132,8 @@ int main(int argc, char** argv) {
 
   command->start();
   listener->start();
+
+  ExitHandler eh;
 
   while (!eh.shouldExit()) {
     std::this_thread::sleep_for(std::chrono::milliseconds(1000));
