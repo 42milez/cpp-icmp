@@ -1,9 +1,7 @@
 #ifndef ICMP_IP_H
 #define ICMP_IP_H
 
-
 #include <cstddef>
-
 #include <string>
 #include <vector>
 
@@ -13,11 +11,11 @@ namespace network
 
   class IP {
   public:
-    IP(const std::string& addr);
-    const bytes & as_byte() const;
-    int as_decimal();
+    IP(const std::string &addr);
+    bytes as_byte() const;
+    int as_decimal() const;
   private:
-    bytes addr_;
+    std::string addr_;
   };
 } // network
 
