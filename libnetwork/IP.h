@@ -11,7 +11,7 @@ namespace network
 
   class IP {
   public:
-    IP(const std::string &addr);
+    IP(const std::string& addr);
     bytes as_byte() const;
     int as_decimal() const;
   private:

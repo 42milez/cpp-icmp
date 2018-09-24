@@ -6,7 +6,7 @@
 
 using namespace network;
 
-IP::IP(const std::string &addr) {
+IP::IP(const std::string& addr) {
   addr_ = addr;
 };
 
