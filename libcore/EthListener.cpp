@@ -66,7 +66,7 @@ void EthListener::wait() {
         this->logger_->error("read");
       } else {
         auto eh = (nw::EthHeader *) buf.data();
-        if (memcmp(eh->ether_dhost, util::BCAST_MAC.data(), 6) != 0 && memcmp(eh->ether_dhost, config_->vmac()->as_str().c_str(), 6) != 0) {
+        if (memcmp(eh->ether_dhost, util::BCAST_MAC.data(), 6) != 0 && memcmp(eh->ether_dhost, config_->vmac()->as_str(), 6) != 0) {
           return;
         }
 

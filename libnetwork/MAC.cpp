@@ -8,9 +8,6 @@
 
 using namespace network;
 
-const std::string MAC_ADDRESS_DELIMITER = ":";
-const std::string MAC_ADDRESS_PATTERN = "[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}";
-
 MAC::MAC(const std::string& mac)
 {
   std::regex pattern(MAC_ADDRESS_PATTERN);
@@ -38,7 +35,7 @@ std::vector<long> MAC::as_hex()
   return octets;
 }
 
-const std::string& MAC::as_str()
+sv::const_pointer MAC::as_str()
 {
-  return mac_;
+  return mac_.data();
 }
