@@ -27,9 +27,7 @@
 using namespace network;
 
 RawSocket::RawSocket(const std::string& device, const std::string &logger_name) {
-  logger_ = spdlog::stdout_color_mt(logger_name);
   device_ = device;
-
   create_socket();
 }
 
@@ -43,14 +41,12 @@ void RawSocket::create_socket() {
   struct sockaddr_ll sa;
 
   if ((fd_ = socket(AF_PACKET, SOCK_RAW, htons(ETH_P_ALL))) < 0) {
-    logger_->critical("socket");
     throw util::InternalErrorException{ "Cannot create socket." };
   }
 
   strcpy(if_req.ifr_name, device_.c_str());
   if (ioctl(fd_, SIOCGIFINDEX, &if_req) < 0) {
     close(fd_);
-    logger_->critical("ioctl (1)");
     throw util::InternalErrorException{ "Cannot create socket." };
   }
 
@@ -59,20 +55,17 @@ void RawSocket::create_socket() {
   sa.sll_ifindex = if_req.ifr_ifindex;
   if (bind(fd_, (struct sockaddr *) &sa, sizeof(sa)) < 0) {
     close(fd_);
-    logger_->critical("bind");
     throw util::InternalErrorException{ "Cannot create socket." };
   }
 
   if (ioctl(fd_, SIOCGIFFLAGS, &if_req) < 0) {
     close(fd_);
-    logger_->critical("ioctl (2)");
     throw util::InternalErrorException{ "Cannot create socket." };
   }
 
   if_req.ifr_flags = if_req.ifr_flags|IFF_PROMISC|IFF_UP;
   if (ioctl(fd_, SIOCSIFFLAGS, &if_req) < 0) {
     close(fd_);
-    logger_->critical("ioctl (3)");
     throw util::InternalErrorException{ "Cannot create socket." };
   }
 #else

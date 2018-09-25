@@ -24,8 +24,6 @@ namespace network
     int fd();
   private:
     void create_socket();
-
-    std::shared_ptr<spdlog::logger> logger_;
     std::string device_;
     int fd_;
     int mux_;

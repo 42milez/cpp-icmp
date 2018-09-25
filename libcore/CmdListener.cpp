@@ -53,8 +53,8 @@ void CmdListener::setup_multiplexer()
 
   struct epoll_event ev { 0 };
   ev.events = EPOLLIN;
-  ev.data.fd = fileno(stdin);
-  if (epoll_ctl(mux_, EPOLL_CTL_ADD, fileno(stdin), &ev)) {
+  ev.data.fd = sock_->fd();
+  if (epoll_ctl(mux_, EPOLL_CTL_ADD, sock_->fd(), &ev)) {
     logger_->error("epoll_ctl");
     throw util::InternalErrorException{ "Cannot create event poll." };
   }
@@ -74,12 +74,13 @@ void CmdListener::wait()
   }
 
   for (auto i = 0; i < nfds; i++) {
-    if (events_[i].data.fd == fileno(stdin)) {
-      std::string cmd;
-//      bytes buf = bytes(SIZE_BUFFER);
-//      fgets(reinterpret_cast<char *>(buf.data()), sizeof(buf.data()), stdin);
-      std::cin >> cmd;
-      parse(cmd);
+    if (events_[i].data.fd == sock_->fd()) {
+      bytes buf = bytes(SIZE_BUFFER);
+      if (auto len = read(sock_->fd(), buf.data(), SIZE_BUFFER) <= 0) {
+        this->logger_->error("read");
+      } else {
+        this->logger_->info("aaa");
+      }
     }
   }
 #else
