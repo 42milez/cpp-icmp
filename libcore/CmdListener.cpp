@@ -2,7 +2,7 @@
 #include <iostream>
 #include <csignal>
 
-#if defined(__linux__)
+#ifdef __linux__
 #include <sys/epoll.h>
 #else
   // Unix
@@ -19,25 +19,31 @@ using namespace core;
 
 using bytes = std::vector<std::byte>;
 
-CmdListener::CmdListener() {
+CmdListener::CmdListener(std::string_view device)
+{
   logger_ = spdlog::stdout_color_mt("CmdListener");
+  sock_ = std::make_unique<nw::TcpSocket>(device);
   setup_multiplexer();
   assign([this]{ this->wait(); });
 }
 
-CmdListener::~CmdListener() {
+CmdListener::~CmdListener()
+{
   stop();
 }
 
-void CmdListener::start() {
+void CmdListener::start()
+{
   run();
 }
 
-void CmdListener::stop() {
+void CmdListener::stop()
+{
   terminate();
 }
 
-void CmdListener::setup_multiplexer() {
+void CmdListener::setup_multiplexer()
+{
 #if defined(__linux__)
   mux_ = epoll_create(N_EVENTS);
   if (mux_ < 0) {
@@ -58,7 +64,8 @@ void CmdListener::setup_multiplexer() {
 #endif
 }
 
-void CmdListener::wait() {
+void CmdListener::wait()
+{
 #if defined(__linux__)
   int nfds = epoll_wait(mux_, events_.data(), N_EVENTS, -1);
   if (nfds <= 0) {
@@ -81,7 +88,8 @@ void CmdListener::wait() {
 #endif
 }
 
-void CmdListener::parse(const std::string &cmd) {
+void CmdListener::parse(const std::string &cmd)
+{
   std::vector<std::string> splitted;
   boost::algorithm::split(splitted, cmd, boost::is_any_of(" "));
 
@@ -96,7 +104,8 @@ void CmdListener::parse(const std::string &cmd) {
   }
 }
 
-void CmdListener::exec_arp(const std::string &option) {
+void CmdListener::exec_arp(const std::string &option)
+{
   if (option == "-a") {
 
   }

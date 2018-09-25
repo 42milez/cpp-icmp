@@ -120,10 +120,11 @@ int main(int argc, char** argv) {
   // Handle Pipe Signal
   register_handler(SIGPIPE, SIG_IGN);
 
-  std::unique_ptr<core::CmdListener> command = std::make_unique<core::CmdListener>();
+  std::unique_ptr<core::CmdListener> command;
   std::unique_ptr<core::EthListener> listener;
 
   try {
+    command = std::make_unique<core::CmdListener>(config->device());
     listener = std::make_unique<core::EthListener>(config);
   } catch (util::InternalErrorException const& e) {
     logger->critical(e.what());
