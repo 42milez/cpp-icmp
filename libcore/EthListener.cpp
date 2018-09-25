@@ -30,7 +30,7 @@ void EthListener::stop() {
 }
 
 void EthListener::setup_multiplexer() {
-#if defined(__linux__)
+#ifdef __linux__
   mux_ = epoll_create(N_EVENTS);
   if (mux_ < 0) {
     logger_->error("epoll_create");
@@ -52,7 +52,7 @@ void EthListener::setup_multiplexer() {
 }
 
 void EthListener::wait() {
-#if defined(__linux__)
+#ifdef __linux__
   int nfds = epoll_wait(mux_, events_.data(), N_EVENTS, -1);
   if (nfds <= 0) {
     logger_->error("epoll_wait");

@@ -6,7 +6,7 @@
 #include <memory>
 #include <string>
 
-#if defined(__linux__)
+#ifdef __linux__
   #include <sys/epoll.h>
 #else
   // UNIX

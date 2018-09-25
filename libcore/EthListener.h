@@ -6,7 +6,7 @@
 #include <memory>
 #include <string>
 
-#if defined(__linux__)
+#ifdef __linux__
   #include <sys/epoll.h>
 #else
   // UNIX
@@ -24,7 +24,7 @@ namespace core
   namespace cfg = config;
   namespace nw = network;
 
-#if defined(__linux__)
+#ifdef __linux__
   using EpEvt = struct epoll_event;
 #endif
 
@@ -46,7 +46,7 @@ namespace core
 
     void setup_multiplexer();
     void wait();
-#if defined(__linux__)
+#ifdef __linux__
     std::array<EpEvt,N_EVENTS> events_;
 #else
     // UNIX

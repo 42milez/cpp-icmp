@@ -1,6 +1,6 @@
 #include <cstring>
 
-#if defined(__linux__)
+#ifdef __linux__
   #include <arpa/inet.h>
   #include <linux/if.h>
   #include <netinet/if_ether.h>
@@ -36,7 +36,7 @@ RawSocket::~RawSocket() {
 }
 
 void RawSocket::create_socket() {
-#if defined(__linux__)
+#ifdef __linux__
   struct ifreq if_req;
   struct sockaddr_ll sa;
 
