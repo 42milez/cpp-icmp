@@ -26,7 +26,7 @@
 
 using namespace network;
 
-RawSocket::RawSocket(const std::string& device, const std::string &logger_name) {
+RawSocket::RawSocket(const std::string& device) {
   device_ = device;
   create_socket();
 }
