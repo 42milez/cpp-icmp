@@ -9,7 +9,7 @@ using bytes = std::vector<std::byte>;
 EthListener::EthListener(std::shared_ptr<cfg::Config> &config) {
   logger_ = spdlog::stdout_color_mt("EthListener");
   config_ = config;
-  sock_ = std::make_unique<nw::RawSocket>(config_->device(), "RawSocket(EthListener)");
+  sock_ = std::make_unique<nw::RawSocket>(config_->device());
   arp_ = std::make_unique<nw::Arp>(config_);
 
   setup_multiplexer();

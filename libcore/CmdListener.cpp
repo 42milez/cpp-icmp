@@ -2,6 +2,8 @@
 #include <iostream>
 #include <csignal>
 
+#include <sys/socket.h>
+
 #ifdef __linux__
 #include <sys/epoll.h>
 #else
@@ -75,11 +77,13 @@ void CmdListener::wait()
 
   for (auto i = 0; i < nfds; i++) {
     if (events_[i].data.fd == sock_->fd()) {
-      bytes buf = bytes(SIZE_BUFFER);
-      if (auto len = read(sock_->fd(), buf.data(), SIZE_BUFFER) <= 0) {
-        this->logger_->error("read");
+      struct sockaddr_storage addr{};
+      socklen_t socklen = sizeof(addr);
+      auto fd = accept(sock_->fd(), (struct sockaddr *) &addr, &socklen);
+      if (fd < 0) {
+        logger_->error("accept");
       } else {
-        this->logger_->info("aaa");
+        logger_->info("accepted.");
       }
     }
   }
